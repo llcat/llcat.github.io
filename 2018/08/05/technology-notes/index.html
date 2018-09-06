@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="技术备忘录可能是年龄大了，记忆力越来越不好呢，本着好记性不如烂笔头的原则，将一些可能会用到的一些技术方面的杂项记录下来。 js访问soap协议的接口如果你的后台项目是基于soap协议编写的webservice,推荐一个jquery的插件，可以简化请求过程。jquery.soap:https://github.com/doedje/jquery.soap非常好使，解决了我最近项目中的痛点，毕竟自己去">
+<meta name="keywords" content="technology">
+<meta property="og:type" content="article">
+<meta property="og:title" content="technology_notes">
+<meta property="og:url" content="https://llcat.github.io/2018/08/05/technology-notes/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="技术备忘录可能是年龄大了，记忆力越来越不好呢，本着好记性不如烂笔头的原则，将一些可能会用到的一些技术方面的杂项记录下来。 js访问soap协议的接口如果你的后台项目是基于soap协议编写的webservice,推荐一个jquery的插件，可以简化请求过程。jquery.soap:https://github.com/doedje/jquery.soap非常好使，解决了我最近项目中的痛点，毕竟自己去">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://llcat.github.io/2018/08/05/technology-notes/open_desktop_share.PNG">
+<meta property="og:image" content="https://llcat.github.io/2018/08/05/technology-notes/cancel_encryption.png">
+<meta property="og:image" content="https://llcat.github.io/2018/08/05/technology-notes/win_remote_desktop.PNG">
+<meta property="og:image" content="https://llcat.github.io/2018/08/05/technology-notes/git_checkout_failure.PNG">
+<meta property="og:updated_time" content="2018-08-29T15:51:20.314Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="technology_notes">
+<meta name="twitter:description" content="技术备忘录可能是年龄大了，记忆力越来越不好呢，本着好记性不如烂笔头的原则，将一些可能会用到的一些技术方面的杂项记录下来。 js访问soap协议的接口如果你的后台项目是基于soap协议编写的webservice,推荐一个jquery的插件，可以简化请求过程。jquery.soap:https://github.com/doedje/jquery.soap非常好使，解决了我最近项目中的痛点，毕竟自己去">
+<meta name="twitter:image" content="https://llcat.github.io/2018/08/05/technology-notes/open_desktop_share.PNG">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2018/08/05/technology-notes/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>technology_notes | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2018/08/05/technology-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">technology_notes
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-05 22:28:54" itemprop="dateCreated datePublished" datetime="2018-08-05T22:28:54+08:00">2018-08-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-29 23:51:20" itemprop="dateModified" datetime="2018-08-29T23:51:20+08:00">2018-08-29</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="技术备忘录"><a href="#技术备忘录" class="headerlink" title="技术备忘录"></a>技术备忘录</h4><p>可能是年龄大了，记忆力越来越不好呢，本着好记性不如烂笔头的原则，将一些可能会用到的一些技术方面的杂项记录下来。</p>
+<h4 id="js访问soap协议的接口"><a href="#js访问soap协议的接口" class="headerlink" title="js访问soap协议的接口"></a>js访问soap协议的接口</h4><p>如果你的后台项目是基于soap协议编写的webservice,推荐一个jquery的插件，可以简化请求过程。<br>jquery.soap:<a href="https://github.com/doedje/jquery.soap" target="_blank" rel="noopener">https://github.com/doedje/jquery.soap</a><br>非常好使，解决了我最近项目中的痛点，毕竟自己去基于soap协议封装请求还是相当麻烦的，有好轮子就直接用吧。</p>
+<h4 id="使用nginx完成反向代理并允许跨域请求"><a href="#使用nginx完成反向代理并允许跨域请求" class="headerlink" title="使用nginx完成反向代理并允许跨域请求"></a>使用nginx完成反向代理并允许跨域请求</h4><p>最近需要将原有的一个android项目，基于vue.js重写为一个spa以兼容多个平台的使用，在从后端拿数据时碰到了这样的问题，本地调试时遇到了浏览器的同源限制，想拿数据非常不方便。想到了下面几种方法：</p>
+<ul>
+<li>我们的web app可以与早先已有的后台项目部署在同一台服务器上。(然而，不现实，仅仅是用来开发调试的情况下，后台team不会允许我们随便摆弄他们的服务器的)</li>
+<li>后台team给他们项目的返回头中添加<code>Access-Control-Allow-Origin</code>等字段，允许跨源访问。(沟通无果，后台team不想加)</li>
+<li><code>jsonp,iframe</code>等技术绕过浏览器的限制。(写起来巨麻烦，还有一些限制，很不爽)</li>
+<li>自己写个中间层去转一下，自己用<code>python</code>基于<code>flask</code>写了中间层去请求，然后前端请求用自己写的接口，但这样调试用写两个接口用下还行，几十几百个接口也不可能一个个的去写。(当然，这里还是赞下py的简洁性，解决跨域访问引入<code>flask-cors</code>一句话就解决了)</li>
+<li>绝招: 使用<code>nginx</code>的反向代理，并在返回头中添加允许跨源访问的字段。</li>
+</ul>
+<p>使用nginx做反向代理是最简单有效的,配好后就可以轻松的使用呢，下面给出我的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       8080;</span><br><span class="line">        server_name  localhost;</span><br><span class="line">        location / &#123;</span><br><span class="line">            if ($request_method = OPTIONS ) &#123;</span><br><span class="line">                return 204;</span><br><span class="line">            &#125;</span><br><span class="line">            add_header Access-Control-Allow-Origin &apos;*&apos;;</span><br><span class="line">            add_header Access-Control-Allow-Methods &apos;GET, PUT, POST, DELETE, OPTIONS&apos;;</span><br><span class="line">            add_header Access-Control-Allow-Headers &apos;content-type,soapaction,*&apos;;</span><br><span class="line">            proxy_pass    http://your-ip:port/;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ol>
+<li><p>因为我使用的后端api是基于soap编写的webservice,请求的资源类型是非常规的,所以浏览器会自动帮我发送一个OPTIONS请求去询问服务器是否支持接下来的跨域请求，比如我的这个OPTIONS请求，头部中包含下面的字段，说的意思是你帮忙看下我接下来跨域的请求的方法是POST,请求的头部中包含<code>content-type</code>和<code>soapaction</code>这两个字段，你支持吗？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Request-Method: POST</span><br><span class="line">Access-Control-Request-Headers: content-type,soapaction</span><br></pre></td></tr></table></figure>
+<p>那我们作为一个方向代理服务器，当然不用去验证什么，所以如果我们拦截到方法是OPTIONS,直接返回状态码204即可，告诉浏览器，你只管发下一个请求吧，返不会结果算我输~</p>
+</li>
+<li><p>那么接下来，我们的nginx自然是把接下来的POST请求直接转发给我们的代理服务器去处理，可以看到这个POST的请求头部中是有刚才OPTIONS请求中提到的字段，如<code>SOAPAction:listAllVmInfoByUserId</code>,完整头部如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Host: localhost:8080</span><br><span class="line">Accept: application/xml, text/xml, */*; q=0.01</span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Referer: http://localhost:8082/</span><br><span class="line">Content-Type: text/xml; charset=UTF-8</span><br><span class="line">SOAPAction: listAllVminfoByUserId</span><br><span class="line">Content-Length: 307</span><br><span class="line">Origin: http://localhost:8082</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Cache-Control: max-age=0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们代理的服务器上的资源实际上是不支持在浏览器中跨源访问的，所以他的response的头部中是不会有允许跨源访问的相关字段的，这个时候靠我们的nginx的<code>add_header</code>的指令给response中增加我们想要的头部即可，如<code>Access-Control-Allow-Methods, Access-Control-Allow-Headers</code>等字段,告诉浏览器我们允许跨域访问喔，返回的数据请收好，整个流程完毕。</p>
+</li>
+</ol>
+<h4 id="Win10远程桌面Ubuntu16-04"><a href="#Win10远程桌面Ubuntu16-04" class="headerlink" title="Win10远程桌面Ubuntu16.04"></a>Win10远程桌面Ubuntu16.04</h4><p>Ubuntu开启远程桌面共享后，想要用win10自带的远程桌面访问，还需要在ubuntu主机上完成下面的配置。</p>
+<ol>
+<li>开启远程桌面共享，见下图<img src="/2018/08/05/technology-notes/open_desktop_share.PNG" title="open_desktop_share"></li>
+<li><p>安装xrdp</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install xrdp</span><br><span class="line"><span class="comment"># 查看服务是否开启</span></span><br><span class="line">service --status-all</span><br><span class="line"><span class="comment"># 若没开启</span></span><br><span class="line">service xrdp start</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装dconf-editor</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install dconf-editor</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装完成后，运行dconf-editor,依次展开org-&gt;gnome-&gt;desktop-&gt;remote-access<br>去掉require-encryption的勾选，如下：<br><img src="/2018/08/05/technology-notes/cancel_encryption.png" title="cancel_require_encryption"></p>
+<ol start="4">
+<li>使用win10远程桌面连接<br>选择vnc-any,输入相关信息连接即可<img src="/2018/08/05/technology-notes/win_remote_desktop.PNG" title="win_remote_desktop">
+<h4 id="docker配置"><a href="#docker配置" class="headerlink" title="docker配置"></a>docker配置</h4>记录以下常用的docker常会用到的配置</li>
+</ol>
+<ul>
+<li><p>修改Docker daemon默认存储位置<br>Docker daemon持久化所有的数据在一个目录下，包含容器，镜像，数据卷等等一切相关的信息。<br>默认路径：<br>Linux:<code>/var/lib/docker</code><br>Win:<code>C:\ProgramData\docker</code><br>假设你使用的linux系统，挂载的主分区分配的空间比较小需要更换docker daemon的存储路径。可以在<code>/etc/docker/daemon.json</code>中这样配置</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"data-root"</span>: <span class="string">"/home/your/path"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在之前配置时，还有使用过这样的写法，但是这次我在官方文档中没有找到，如下(在我的18.03版本的中，这样配置也是生效的)：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"graph"</span>: <span class="string">"/home/your/path"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>daemon.json</code>中对docker daemon作配置是官方推荐的做法。除此之外，还有启动命令行指定参数等，但这个做法显然比较简单。</p>
+</li>
+<li><p>给docker daemon配置代理HTTP/HTTPS代理<br>如果你当前的环境在公司内网中，需要通过代理才能访问Internet,那么你想要从外部pull镜像时，也要给你的docker daemon单独配置代理，docker daemon是在启动时根据<code>HTTP_PROXY</code>,<code>HTTPS_PROXY</code>,<code>NO_PROXY</code>三个环境变量来配置HTTP/HTTPS代理的，要配置docker daemon的代理，我们需要做如下修改：</p>
+<ol>
+<li>在systemd目录下为docker创建目录<br><code>sudo mkdir -p /etc/systemd/system/docker.service.d/</code></li>
+<li>创建http-proxy.conf或https-proxy.conf文件<br><code>touch /etc/syatemd/system/docker.service.d/http-proxy.conf</code><br>并在文件中添加下面的配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environments=&quot;HTTP_PROXY=http://proxy-server-name-or-ip:port&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果你是走的HTTPS代理，在https-proxy.conf中添加上面的内容</p>
+<ol start="3">
+<li><p>如果你有内网的私有registries，可以配置哪些域名或ip不走代理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environment=&quot;HTTP_PROXY=http://proxy-server-name-or-ip:port&quot;</span><br><span class="line">Environment=&quot;NO_PROXY=localhost,127.0.0.1&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刷新配置并重启docker daemon</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><p>新安装docker后，设置非root用户可使用</p>
+<ol>
+<li><p>添加docker用户组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo groupadd docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将当前用户添加到用户组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker $USER</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注销当前用户在重新登陆即可使用</p>
+</li>
+</ul>
+<h4 id="C-预处理器"><a href="#C-预处理器" class="headerlink" title="C 预处理器"></a>C 预处理器</h4><p>C语言通过预处理提供了一些语言层面的功能，一般来说，从我们的源代码到可执行文件要经过下面几个步骤，预处理 -&gt; [根据以#开头的指令，处理过的源程序代码] -&gt; 编译器 -&gt; [汇编程序] -&gt; 汇编器 -&gt; [目标程序， xxx.o] -&gt; 链接器 -&gt; [可执行程序]，预处理是我们程序编译开始的第一个步骤，那么在C语言我们主要使用到下面几个预处理的指令。</p>
+<ul>
+<li><p>文件包含<br>替换为指定的文件名中的内容<br>examples:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据定义的规则查找文件</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">// 从源文件所处位置查找文件</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"mytool.h"</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>宏定义<br>形式如：<code>#define 名字 替换文本</code><br>规则：</p>
+</li>
+</ul>
+<ol>
+<li>定义的<strong>名字</strong>的作用域从其定义的位置开始</li>
+<li>替换文本可以是任意字符串，一个较长的宏定义可以分为多行，待续文本用<code>\</code>连接。 </li>
+<li><p>宏定义可以使用前面定义的宏，替换仅对记号进行，对引号中的内容和部分匹配不做替换，如:<br>eg:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NAME <span class="meta-string">"pino"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对于引号中的内容不做替换</span></span><br><span class="line"><span class="comment">//上面定义的NAME不会去替换引号中的NAME</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PRINTNAME printf(<span class="meta-string">"NAME\n"</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对于部分匹配的内容不做替换</span></span><br><span class="line"><span class="comment">//上面定义的NAME不会去替换MYNAME中的NAME</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INCLUDENAME char *MYNAME=<span class="meta-string">"daemon"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%s\n"</span>,NAME);</span><br><span class="line">    PRINTNAME;</span><br><span class="line">    INCLUDENAME;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, MYNAME);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一些其他的例子</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义一个死循环</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> forverloop for(;;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//带参数的宏定义</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> max(A,B) (A)&gt;(B)?(A):(B)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//带参数的宏定义的参数如果在替换文本中以#开头，会视为文本进行拼接,</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> dprint(expr) printf(#expr<span class="meta-string">"=%g\n"</span>,expr)</span></span><br><span class="line"><span class="comment">//实际上被替换为</span></span><br><span class="line">dprintf(<span class="number">3</span>/<span class="number">5</span>) -&gt; <span class="built_in">printf</span>(<span class="string">"3/5=%g\n"</span>, <span class="number">3</span>/<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//取消宏定义</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">undef</span> forverloop</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>条件包含<br>条件包含可以对预处理流程做控制，当#if中的条件(一个整型表达式，不可包含sizeof,类型转换，enum常量)判断不为0时，则包含下面的内容，直到碰到#endif, #elif, #else为止。<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> SYSTEM == SYSV</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> HDR <span class="meta-string">"sysv.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">elif</span> SYSTEM == BSD</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> HDR <span class="meta-string">"bsd.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">elif</span> SYSTEM == MSDOS</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> HDR <span class="meta-string">"msdos.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> HDR <span class="meta-string">"default.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> HDR</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="git-clone速度较慢"><a href="#git-clone速度较慢" class="headerlink" title="git clone速度较慢"></a>git clone速度较慢</h4><p>本来想将spring-boot的代码clone下来观摩一番，在几次三番的clone操作都以connection reset告终后，查阅有几种方式提速，下面提供一种较简单的方式，修改hosts文件。</p>
+<ol>
+<li><p>hosts file location:</p>
+<ul>
+<li>for windows:<code>C:\Windows\System32\drivers\etc</code></li>
+</ul>
+</li>
+<li><p>查找github的ip地址<br>使用下面的网站查找ip<br><code>https://www.ipaddress.com/</code></p>
+</li>
+<li><p>固定github.com的ip地址，不在使用dns分配的ip地址去访问<br>在hosts文件末尾添加下面内容<br><code>192.30.253.112 github.com</code></p>
+</li>
+</ol>
+<p>这种方式已经能将速度提升至200KB/s呢，相较之前10KB/s左右的速度已经有很大改善呢，如果你尝试后效果不明显，请试试梯子吧(eg:shadowsocks:<a href="https://portal.shadowsocks.to,一个收费但很稳定的梯子" target="_blank" rel="noopener">https://portal.shadowsocks.to,一个收费但很稳定的梯子</a>)</p>
+<h4 id="git-checkout-fail-FILE-NAME-TOO-LONG"><a href="#git-checkout-fail-FILE-NAME-TOO-LONG" class="headerlink" title="git checkout fail: FILE NAME TOO LONG"></a>git checkout fail: FILE NAME TOO LONG</h4><p>今天clone一个仓库时碰到下面的错误，由于路径太长，git不能检出到工作分区。报错如下图<br><img src="/2018/08/05/technology-notes/git_checkout_failure.PNG" title="git_checkout_failure"></p>
+<p>解决方法如下:</p>
+<ol>
+<li><p>配置git core的longpath属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 配置全局</span><br><span class="line">git config --global core.longpaths true</span><br><span class="line"># 配置单个项目</span><br><span class="line">git config core.longpaths true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新检出到工作分区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -f HEAD</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/technology/" rel="tag"># technology</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/27/随笔小记/" rel="next" title="随笔小记">
+                <i class="fa fa-chevron-left"></i> 随笔小记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/23/learn-vue-js/" rel="prev" title="learn-vue.js">
+                learn-vue.js <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#技术备忘录"><span class="nav-number">1.</span> <span class="nav-text">技术备忘录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#js访问soap协议的接口"><span class="nav-number">2.</span> <span class="nav-text">js访问soap协议的接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用nginx完成反向代理并允许跨域请求"><span class="nav-number">3.</span> <span class="nav-text">使用nginx完成反向代理并允许跨域请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Win10远程桌面Ubuntu16-04"><span class="nav-number">4.</span> <span class="nav-text">Win10远程桌面Ubuntu16.04</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker配置"><span class="nav-number">5.</span> <span class="nav-text">docker配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-预处理器"><span class="nav-number">6.</span> <span class="nav-text">C 预处理器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git-clone速度较慢"><span class="nav-number">7.</span> <span class="nav-text">git clone速度较慢</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git-checkout-fail-FILE-NAME-TOO-LONG"><span class="nav-number">8.</span> <span class="nav-text">git checkout fail: FILE NAME TOO LONG</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
