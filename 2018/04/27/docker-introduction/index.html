@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="起步 docker概念docker是一个能让开发者和系统管理员使用容器开发，管理，运行应用的平台，我们把使用linux容器部署应用称为容器化，容器并非是一个新的技术，但是使用它部署应用非常的方便，它具有以下优点:  灵活: 最复杂的应用也可以容器化 轻量: 容器利用共享的主机内核 可更换: 你可以随时更换和升级 可移植: 你可以在本地完成构建，然后部署到你需要部署的任何地方(cloud or an">
+<meta name="keywords" content="java, web devlop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker-introduction">
+<meta property="og:url" content="https://llcat.github.io/2018/04/27/docker-introduction/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="起步 docker概念docker是一个能让开发者和系统管理员使用容器开发，管理，运行应用的平台，我们把使用linux容器部署应用称为容器化，容器并非是一个新的技术，但是使用它部署应用非常的方便，它具有以下优点:  灵活: 最复杂的应用也可以容器化 轻量: 容器利用共享的主机内核 可更换: 你可以随时更换和升级 可移植: 你可以在本地完成构建，然后部署到你需要部署的任何地方(cloud or an">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://llcat.github.io/2018/04/27/docker-introduction/docker_service_ls.png">
+<meta property="og:image" content="https://llcat.github.io/2018/04/27/docker-introduction/docker_service_ps.png">
+<meta property="og:updated_time" content="2019-04-10T14:46:19.616Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="docker-introduction">
+<meta name="twitter:description" content="起步 docker概念docker是一个能让开发者和系统管理员使用容器开发，管理，运行应用的平台，我们把使用linux容器部署应用称为容器化，容器并非是一个新的技术，但是使用它部署应用非常的方便，它具有以下优点:  灵活: 最复杂的应用也可以容器化 轻量: 容器利用共享的主机内核 可更换: 你可以随时更换和升级 可移植: 你可以在本地完成构建，然后部署到你需要部署的任何地方(cloud or an">
+<meta name="twitter:image" content="https://llcat.github.io/2018/04/27/docker-introduction/docker_service_ls.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2018/04/27/docker-introduction/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>docker-introduction | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2018/04/27/docker-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">docker-introduction
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-04-27 14:06:59" itemprop="dateCreated datePublished" datetime="2018-04-27T14:06:59+08:00">2018-04-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-10 22:46:19" itemprop="dateModified" datetime="2019-04-10T22:46:19+08:00">2019-04-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h4><ul>
+<li><p><strong>docker概念</strong><br>docker是一个能让开发者和系统管理员使用容器开发，管理，运行应用的平台，我们把使用linux容器部署应用称为容器化，容器并非是一个新的技术，但是使用它部署应用非常的方便，它具有以下优点:</p>
+<ul>
+<li>灵活: 最复杂的应用也可以容器化</li>
+<li>轻量: 容器利用共享的主机内核</li>
+<li>可更换: 你可以随时更换和升级</li>
+<li>可移植: 你可以在本地完成构建，然后部署到你需要部署的任何地方(cloud or anywhere)</li>
+<li>可拓展:可以增加和自动分发容器副本</li>
+<li>可堆叠: 你可以即时的垂直堆叠服务</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li><p><strong>镜像和容器(Image and Container)</strong><br><strong>镜像(Image)</strong><br>我们可以由镜像来启动一个容器，一个镜像是一个可执行的程序包，含有你的应用运行时需要的一切东西，代码，运行环境，依赖包，环境变量，配置文件等。<br><strong>容器(Container)</strong><br>容器是镜像运行时的一个实例，或者说是镜像在内存中运行时,具有状态或是用户进程的镜像。你可以使用<code>docker ps</code>查看正在运行的容器，类似你在linux系统中查看进程一样。</p>
+</li>
+<li><p><strong>docker命令回顾</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## List Docker CLI Commands</span></span><br><span class="line">docker</span><br><span class="line">docker container --<span class="built_in">help</span></span><br><span class="line">docker container ls --<span class="built_in">help</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Display docker version and info</span></span><br><span class="line">docker --version</span><br><span class="line">docker version</span><br><span class="line">docker info</span><br><span class="line"></span><br><span class="line"><span class="comment">## Execute docker image</span></span><br><span class="line">docker run (image-name, like hello-world)</span><br><span class="line"></span><br><span class="line"><span class="comment">## List all docker images</span></span><br><span class="line">docker image ls</span><br><span class="line"></span><br><span class="line"><span class="comment">## List docker containers(all,runing, all and in quite mode)</span></span><br><span class="line">docker container ls</span><br><span class="line">docker container ls --all</span><br><span class="line">docker container ls -aq</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="容器-Containers"><a href="#容器-Containers" class="headerlink" title="容器(Containers)"></a>容器(Containers)</h4><ul>
+<li><p><strong>引导</strong><br>这章我们以容器的方式来构建我们的应用,不同于常规的模式,我们从该方式的最底层层次(container)来开始构建我们的应用，在containers层之上还有services层,用来定义container在生产环境中如何运作，最顶层是stacks层，用来定义services之间的交互。</p>
+</li>
+<li><p><strong>新的开发环境</strong><br>在过去，我们想要编写一个python应用，首先肯定是去在本机安装一个python解释器，然后安装一堆依赖的包去完成开发工作，但是会有这样一种情况，你的应用在本地机器环境上运行的很好，但是现在想要将他放在server上运行时就不一定呢，你可能需要重新手动在server上将一堆依赖配齐，当然，手动配置一台server的运行环境看起来问题不大，但是如果是10台，100台呢(当然这种重复工作用脚本也可以解决)？是否有一个更合适的方式来解决这个困境。<br>在docker中，我们可以使用一个可移植的python运行环境当作一个镜像，在构建时将将这个python镜像和我们的程序代码一起包括在内，确保我们的代码，依赖，运行时环境会打包在一起迁移。这个可移植的python环境镜像是由Dockerfile来进行定义的。</p>
+</li>
+<li><p><strong>使用Dockerfile定义一个容器</strong><br>Dockerfile文件定义了在容器内运行环境发生的变化,在这个容器环境中，类似网络接口和磁盘驱动等资源是虚拟的，这个容器是完全与你的系统相隔离的，所以你需要映射端口到外部，并且指定需要拷贝什么文件到这个容器环境中来,完成这些定义后，可以预期运行在这个容器里的应用无论运行在何处，他的运行环境始终是一致的。</p>
+<p>下面我们来新建一个Dockerfile文件并完成相关的定义</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># use an offical python runtime as a parent image</span></span><br><span class="line"><span class="comment"># 使用官方的python运行环境作为我们的父镜像</span></span><br><span class="line">FROM python:2.7-slim</span><br><span class="line"></span><br><span class="line"><span class="comment"># set the working directory to /app</span></span><br><span class="line"><span class="comment"># 设置工作路径为 /app</span></span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy the current directory contents into the container at /app</span></span><br><span class="line"><span class="comment"># 将当前路径下的所有内容添加到容器的/app文件夹下</span></span><br><span class="line">ADD . /app</span><br><span class="line"></span><br><span class="line"><span class="comment"># install any needed packages specified in requirements.txt</span></span><br><span class="line"><span class="comment"># 安装app运行需要的依赖包</span></span><br><span class="line">RUN pip install --trusted-host pypi.python.org -r requirements.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make port 80 avaliable to the world outside this container</span></span><br><span class="line"><span class="comment"># 使80端口对于外界可用</span></span><br><span class="line">EXPOSE 80</span><br><span class="line"></span><br><span class="line"><span class="comment"># Define environment variable</span></span><br><span class="line"><span class="comment"># 定义了一个环境变量叫NAME,值为llcat</span></span><br><span class="line">ENV NAME llcat</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run app.py when the container launches</span></span><br><span class="line"><span class="comment"># 容器启动时执行命令 python app.py</span></span><br><span class="line">CMD [<span class="string">"python"</span>,<span class="string">"app.py"</span>]</span><br></pre></td></tr></table></figure>
+<p>这样我们就完成了一个Dockerfile，接下来我们要创建相关的app.py文件和requirements.txt文件。</p>
+</li>
+<li><p><strong>创建app应用</strong><br>接下来我们要创建我们应用相关的文件，app.py和requirements.txt,将其放在Dockerfile的同级目录下，在Dockerfile中编写的ADD指令会帮助我们将应用文件也打包到镜像中，得益于EXPOSE提供的80端口，我们可以在外界使用http协议访问我们应用返回的内容。<br>requirements.txt</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Flask</span><br><span class="line">Redis</span><br></pre></td></tr></table></figure>
+<p>app.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> redis <span class="keyword">import</span> Redis, RedisError</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="comment"># Connect to Redis</span></span><br><span class="line">redis = Redis(host=<span class="string">"redis"</span>, db=<span class="number">0</span>,     socket_connect_timeout=<span class="number">2</span>, socket_timeout=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route("/")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">      visits = redis.incr(<span class="string">"counter"</span>)</span><br><span class="line">  <span class="keyword">except</span> RedisError:</span><br><span class="line">      visits = <span class="string">"&lt;i&gt;cannot connect to Redis, counter disabled&lt;/i&gt;"</span></span><br><span class="line"></span><br><span class="line">  html = <span class="string">"&lt;h3&gt;Hello &#123;name&#125;!&lt;/h3&gt;"</span> \</span><br><span class="line">         <span class="string">"&lt;b&gt;Hostname:&lt;/b&gt; &#123;hostname&#125;&lt;br/&gt;"</span> \</span><br><span class="line">         <span class="string">"&lt;b&gt;Visits:&lt;/b&gt; &#123;visits&#125;"</span></span><br><span class="line">  <span class="keyword">return</span> html.format(name=os.getenv(<span class="string">"NAME"</span>, <span class="string">"world"</span>), hostname=socket.gethostname(), visits=visits)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">80</span>)</span><br></pre></td></tr></table></figure>
+<p>这样我们就完成了这个应用的搭建，分析下，RUN pip install -r requirements.txt会帮助我们下载需要的依赖，ENV指令可以设置在这个容器中的环境变量，我们无需在自己的系统里安装python环境和requirements.txt中需要的依赖,也不会在构建或运行镜像时将这些环境和依赖安装在你的系统上，看起来你没有安装任何东西，但实际上你拥有一切需要的环境和依赖。</p>
+</li>
+<li><p><strong>构建应用</strong><br>现在我们可以开始构建应用呢，确认你当前的工作路径下存在<code>Dockerfile, app.py, requirements.txt</code>三个文件，你可以使用<code>ls</code>命令查看。<br>接下来我们可以使用构建命令来构建一个镜像，你可以使用<code>-t</code>参数来给镜像指定一个友好的名字(name:tag的格式，如果你不指定tag,默认是name:lastest)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t container_demo .</span><br></pre></td></tr></table></figure>
+<p>现在我们的机器上已经有一个镜像,我们可以使用下面的指令查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br><span class="line"></span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">container_demo      latest              070ee1f77988        3 days ago          151MB</span><br><span class="line">python              2.7-slim            b16fde09c92c        4 weeks ago         139MB</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>运行应用</strong><br>接下来使用运行指令将我们的应用跑起来，使用<code>-p</code>参数来指定本机的某个端口(eg:9999)与容器开放的80端口关联起来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 9999:80 container_demo</span><br></pre></td></tr></table></figure>
+<p>在我们的app.py中可以看到，我们的python应用监听的是地址和端口是<a href="http://0.0.0.0:80,但这是对于容器内部而言，python应用监听的是容器内的端口，对于它而言并不会知道我们在外部将该容器的80端口与我们的9999端口关联起来呢，所以我们在外部使用浏览器或其他方式访问的地址应该是`http://localhost:9999`" target="_blank" rel="noopener">http://0.0.0.0:80,但这是对于容器内部而言，python应用监听的是容器内的端口，对于它而言并不会知道我们在外部将该容器的80端口与我们的9999端口关联起来呢，所以我们在外部使用浏览器或其他方式访问的地址应该是`http://localhost:9999`</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:9999</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在Window系统中，Ctrl+C不能停止一个运行的容器，你需要使用命令<code>docker container stop &lt;Container Name Or Id&gt;</code>来停止一个运行的容器。</p>
+</blockquote>
+</li>
+<li><p><strong>分享镜像</strong><br>分享我们的docker镜像前需要注册一个Docker Id,我们默认使用Docker官方提供给我们的公用仓库。如果你有特殊需求也可以搭建自己的私有仓库。如果你还没有Docker Id,前往<a href="https://cloud.docker.com" target="_blank" rel="noopener">cloud.docker.com</a>注册,注意国内用户这里需要挂VPN，因为注册页使用了谷歌的人机验证服务。<br>注册完成后使用下面命令登陆</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>镜像标签</strong><br>我们使用<code>username/repository:tag</code>这种申明方式来关联一个本地镜像到远程仓库,尽量给<code>repository:tag</code>取一个有意义的名字，类似<code>get-started:part2</code>，表示将本地镜像放置在<code>get-started</code>仓库，镜像标签为<code>part2</code>。我们使用下面的命令来给一个镜像打标签。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># docker tag image username/get-started:tag</span><br><span class="line">docker tag container_demo</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><strong>发布镜像</strong><br>使用下面的命令将你的本地镜像推送到远程仓库,完成后即可登陆Docker Hub查看已经推送的镜像。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push username/repository:tag</span><br></pre></td></tr></table></figure>
+<p>如果你使用了自己搭建的私有镜像仓库，那么你需要指定username为具体的仓库地址，以我们自己搭建的nexus私有库为例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 登陆后输入用户名和密码</span><br><span class="line">docker login 10.203.71.34:9091</span><br><span class="line"># 给你想要上传的image打tag</span><br><span class="line">docker tag 10.203.71.34:9091/repo-name:tag</span><br><span class="line"># 推送镜像至私有仓库</span><br><span class="line">docker push 10.203.71.34:9091/repo-name:tag</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>从远程仓库拉取和运行镜像</strong><br>到这步为止，你已经可以使用下面的命令在任何一台机器上运行你的应用呢。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 80:80 username/repository:tag</span><br></pre></td></tr></table></figure>
+<p>如果你的本地不存在这个镜像，docker会先从远程仓库拉取到这个镜像,无论你在那台机器上运行<code>docker run</code>指令，docker都会自动帮你完成拉取这个包含python运行环境，相关依赖包，你的应用代码的仓库，并帮你自动执行应用。</p>
+</li>
+<li><p><strong>docker命令回顾</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create image using this directory Dockerfile</span></span><br><span class="line">docker build -t &lt;image-name&gt; .</span><br><span class="line"><span class="comment"># Run a image and binding port 9999 to 80</span></span><br><span class="line">docker run -p 9999:80 &lt;image-name&gt;</span><br><span class="line"><span class="comment"># Run with detached mode</span></span><br><span class="line">docker run -d -p 9999:80 &lt;image-name&gt;</span><br><span class="line"><span class="comment"># List running containers</span></span><br><span class="line">docker container ls</span><br><span class="line"><span class="comment"># List all containers even container is not running</span></span><br><span class="line">docker container ls -a</span><br><span class="line"><span class="comment"># Gracefully stop a running container</span></span><br><span class="line">docker container stop &lt;<span class="built_in">hash</span>&gt;</span><br><span class="line"><span class="comment"># Force stop a running container</span></span><br><span class="line">docker container <span class="built_in">kill</span> &lt;<span class="built_in">hash</span>&gt;</span><br><span class="line"><span class="comment"># Remove specified container from this machine</span></span><br><span class="line">dokcer container rm &lt;<span class="built_in">hash</span>&gt;</span><br><span class="line"><span class="comment"># Remove all containers</span></span><br><span class="line">docker container rm $(docker container ls -a -q)</span><br><span class="line"><span class="comment"># List all images on this machine</span></span><br><span class="line">docker image ls -a</span><br><span class="line"><span class="comment"># Remove specified image on this machine</span></span><br><span class="line">docker image rm &lt;<span class="built_in">hash</span>&gt;</span><br><span class="line"><span class="comment"># Remove all images</span></span><br><span class="line">docker image rm $(docker iamge ls -a -q)</span><br><span class="line"><span class="comment"># Login in this CLI session use your docker credentials</span></span><br><span class="line"><span class="comment"># Tag image for upload to registry</span></span><br><span class="line">docker tag &lt;image&gt; username/repository:tag</span><br><span class="line"><span class="comment"># Upload tagged image to your registry</span></span><br><span class="line">docker push username/repository:tag</span><br><span class="line"><span class="comment"># Run image from a registry</span></span><br><span class="line">docker run username/repository:tag</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="服务-Services"><a href="#服务-Services" class="headerlink" title="服务(Services)"></a>服务(Services)</h4><ul>
+<li><p><strong>引言</strong><br>开始这章前确保你已经掌握docker相关的基本概念，并知道如何创建和使用container,在这个前提下，我们会学习如何动态的拓展我们的应用并实现负载均衡。那么我们需要进入分布式应用的下一个层次:<code>the services</code></p>
+</li>
+<li><p><strong>关于Services</strong><br>在一个分布式的应用中，应用不同的功能部分被称为服务，以搭建一个视频分享的网站来讲：我们需要一个服务用来存储应用的数据。一个服务用来在后台对用户上传的视频进行转码，另一个服务用来提供展示的用户界面。那么services就可以看作是生产环境中的containers,一个service也仅仅运行一个镜像，不同的地方在于在services这个层次结构中，我们可以定义镜像的运行方式。比如绑定在那个端口运行，运行多少个container的副本等等，在配置文件中我们改变一个数字就可以增加运行的容器数目，从而分配更多的计算资源。在docker平台上，我们很容易就可以实现上述的内容。</p>
+</li>
+<li><p><strong><code>docker-compose.yml</code>文件</strong><br>保存下面的配置到文件<code>docker-compose.yml</code>中。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  web:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">username/repo:tag</span></span><br><span class="line"><span class="attr">    deploy:</span></span><br><span class="line"><span class="attr">      replicas:</span> <span class="number">5</span></span><br><span class="line"><span class="attr">      resources:</span></span><br><span class="line"><span class="attr">        limits:</span></span><br><span class="line"><span class="attr">          cpus:</span> <span class="string">"0.1"</span></span><br><span class="line"><span class="attr">          memory:</span> <span class="number">50</span><span class="string">M</span></span><br><span class="line"><span class="attr">      restart_policy:</span></span><br><span class="line"><span class="attr">        condition:</span> <span class="string">on-failure</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"4000:80"</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">webnet</span></span><br><span class="line"><span class="attr">  networks:</span></span><br><span class="line"><span class="attr">    webnet:</span></span><br></pre></td></tr></table></figure>
+<p>在<code>docker-compose.yml</code>文件中，告诉docker做下面这些工作。</p>
+<ul>
+<li>使用你指定的镜像。</li>
+<li>运行该镜像的5个实例作为一个服务，定义该服务的名称为<code>web</code>，并限定了每个实例使用的资源大小。</li>
+<li>当有容器异常退出时，立即重启容器。</li>
+<li>绑定本机的4000端口与服务<code>web</code>的80端口绑定。</li>
+<li>通知<code>web</code>下的所有容器共享80端口，经由一个名为<code>webnet</code>的负载均衡网络。</li>
+<li>定义了一个默认配置的网络<code>webnet</code>(默认的是一个负载均衡的网络)</li>
+</ul>
+</li>
+<li><p><strong>运行新的负载均衡应用</strong><br>在使用<code>docker stack deploy</code>命令部署我们的服务前,我们需要先执行下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker swarm init</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>Note</strong>：我们会在后续的章节中介绍上面这条指令的意义，如果你不执行<code>docker swarm init</code>，会得到错误提示: <font color="red">this node is not a swarm manager.</font></p>
+</blockquote>
+<p>现在让我们运行这个应用，给它取名为<code>service_demo</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack deploy -c docker-compose.yml service_demo</span><br></pre></td></tr></table></figure>
+<p>这样，我们的单个服务栈(service stack)就运行了5个容器实例。让我们看看service相关的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker service ls</span><br></pre></td></tr></table></figure>
+<p>Look for outputs:</p>
+<img src="/2018/04/27/docker-introduction/docker_service_ls.png" title="docker_service_ls">
+<p>服务的名称会加上我们的应用名称作为前缀，<code>web</code>服务的名字变为<code>service_demo_web</code>，在服务中运行的单个容器称为一个task,他的名字会根据replicas数目来递增，使用下面的命令来查看服务下的task信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker service ps service_demo_web</span><br></pre></td></tr></table></figure>
+<p>Look for outputs:</p>
+<img src="/2018/04/27/docker-introduction/docker_service_ps.png" title="docker_service_ps">
+<p>接下来可以在浏览器中访问<code>http://localhost:4000</code>,多刷新几次，看看每次的HostName是否相同，如果不同的话，说明请求被均分到不同的task中处理呢。</p>
+</li>
+<li><p><strong>拓展我们的应用</strong><br>假设现在我们的服务不需要那么多task用来处理请求，那么我们就可以减少我们服务占用的资源，只需要在docker-compose.yml定义中减少我们的容器副本的数目，再次重新部署即可。减少replicas为2，重新部署服务后在看看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 重新部署</span><br><span class="line">docker stack deploy -c docker-compose.yml service_demo</span><br><span class="line"># 查看service中的task</span><br><span class="line">docker service ps service_demo_web</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>移除应用和集群</strong><br>使用<code>docker stack rm</code>来移除我们的应用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack rm service_demo</span><br></pre></td></tr></table></figure>
+<p>将我们最先init的swarm manager从集群中移除</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker swarm leave --force</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>命令回顾</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># list stacks or apps</span></span><br><span class="line">docker stack ls</span><br><span class="line"><span class="comment"># run the specified compose file</span></span><br><span class="line">docker stack deploy -c &lt;composefile&gt; &lt;appname&gt;</span><br><span class="line"><span class="comment"># list running services associated with an app</span></span><br><span class="line">docker service ls</span><br><span class="line"><span class="comment"># list tasks associated with the apps</span></span><br><span class="line">docker service ps &lt;service&gt;</span><br><span class="line"><span class="comment"># inspect task or container</span></span><br><span class="line">docker inspect &lt;task or container&gt;</span><br><span class="line"><span class="comment"># tear down an application</span></span><br><span class="line">docker stack rm &lt;appname&gt;</span><br><span class="line"><span class="comment"># take down a single node swarm from the manager</span></span><br><span class="line">docker swarn leave --force</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/19/css3-flexbox-detail/" rel="next" title="css3弹性盒子详解">
+                <i class="fa fa-chevron-left"></i> css3弹性盒子详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/24/learn-english-day-by-day/" rel="prev" title="learn english day by day">
+                learn english day by day <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#起步"><span class="nav-number">1.</span> <span class="nav-text">起步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#容器-Containers"><span class="nav-number">2.</span> <span class="nav-text">容器(Containers)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务-Services"><span class="nav-number">3.</span> <span class="nav-text">服务(Services)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

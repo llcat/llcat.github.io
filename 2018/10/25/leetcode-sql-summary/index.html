@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="LeetCode SQL类题目总结LeetCode上非付费的SQL题目就那么几道,这几天花时间刷了一遍，顺便总结下里面涉及到的知识点。">
+<meta name="keywords" content="SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode(SQL Summary)">
+<meta property="og:url" content="https://llcat.github.io/2018/10/25/leetcode-sql-summary/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="LeetCode SQL类题目总结LeetCode上非付费的SQL题目就那么几道,这几天花时间刷了一遍，顺便总结下里面涉及到的知识点。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-22T15:01:42.718Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode(SQL Summary)">
+<meta name="twitter:description" content="LeetCode SQL类题目总结LeetCode上非付费的SQL题目就那么几道,这几天花时间刷了一遍，顺便总结下里面涉及到的知识点。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2018/10/25/leetcode-sql-summary/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>LeetCode(SQL Summary) | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2018/10/25/leetcode-sql-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LeetCode(SQL Summary)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-25 15:02:29" itemprop="dateCreated datePublished" datetime="2018-10-25T15:02:29+08:00">2018-10-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-22 23:01:42" itemprop="dateModified" datetime="2019-06-22T23:01:42+08:00">2019-06-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="LeetCode-SQL类题目总结"><a href="#LeetCode-SQL类题目总结" class="headerlink" title="LeetCode SQL类题目总结"></a>LeetCode SQL类题目总结</h4><p>LeetCode上非付费的SQL题目就那么几道,这几天花时间刷了一遍，顺便总结下里面涉及到的知识点。</p>
+<a id="more"></a>
+<h4 id="Easy-Level"><a href="#Easy-Level" class="headerlink" title="Easy Level"></a>Easy Level</h4><h5 id="175-Combine-Two-Tables"><a href="#175-Combine-Two-Tables" class="headerlink" title="175. Combine Two Tables"></a>175. Combine Two Tables</h5><p>Table: Person</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PersonId</td>
+<td>int</td>
+</tr>
+<tr>
+<td>FirstName</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>LastName</td>
+<td>varchar</td>
+</tr>
+</tbody>
+</table>
+<p>PersonId is the primary key column for this table.</p>
+<p>Table: Address</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AddressId</td>
+<td>int</td>
+</tr>
+<tr>
+<td>PersonId</td>
+<td>int</td>
+</tr>
+<tr>
+<td>City</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>State</td>
+<td>varchar</td>
+</tr>
+</tbody>
+</table>
+<p>AddressId is the primary key column for this table.</p>
+<p>Write a SQL query for a report that provides the following information for each person in the Person table, regardless if there is an address for each of those people:</p>
+<p>FirstName, LastName, City, State</p>
+<p><strong>知识点:outter join</strong><br>看条件可以知道，我们需要查找出Person表中所有的项，即使某个人没有对应的地址。所以我们只需要使用左外连接就可以完成查询要求。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> FirstName, LastName, City, State </span><br><span class="line"><span class="keyword">FROM</span> Person </span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Address</span><br><span class="line"><span class="keyword">ON</span> Person.PersonId=Address.PersonId</span><br></pre></td></tr></table></figure></p>
+<h5 id="176-Second-Highest-Salary"><a href="#176-Second-Highest-Salary" class="headerlink" title="176. Second Highest Salary"></a>176. Second Highest Salary</h5><p>Write a SQL query to get the second highest salary from the Employee table.</p>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>Salary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>2</td>
+<td>200</td>
+</tr>
+<tr>
+<td>3</td>
+<td>300</td>
+</tr>
+</tbody>
+</table>
+<p>For example, given the above Employee table, the query should return 200 as the second highest salary. If there is no second highest salary, then the query should return null.</p>
+<table>
+<thead>
+<tr>
+<th>SecondHighestSalary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+</tr>
+</tbody>
+</table>
+<p><strong>知识点:control flow functions</strong><br>这道题我认为主要的考察点在MySQL的流程控制函数，如<code>CASE</code>,<code>IF</code>,<code>IFNULL</code>,<code>NULLIF</code>,这道题目我们结合使用<code>LIMIT</code>和<code>IFNULL</code>函数就可以解决<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">IFNULL</span>(</span><br><span class="line">    (<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> Salary</span><br><span class="line">     <span class="keyword">FROM</span> Employee</span><br><span class="line">     <span class="keyword">ORDER</span> <span class="keyword">BY</span> Salary</span><br><span class="line">     <span class="keyword">LIMIT</span> <span class="number">1</span>,<span class="number">1</span></span><br><span class="line">    ), <span class="literal">NULL</span></span><br><span class="line">) <span class="keyword">AS</span> SecondHighestSalary</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html" target="_blank" rel="noopener">MySQL control flow functions</a></p>
+</blockquote>
+<h5 id="182-Duplicate-Emails"><a href="#182-Duplicate-Emails" class="headerlink" title="182. Duplicate Emails"></a>182. Duplicate Emails</h5><p>Write a SQL query to find all duplicate emails in a table named Person.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Id</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1</td>
+<td><a href="mailto:a@b.com" target="_blank" rel="noopener">a@b.com</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>2</td>
+<td><a href="mailto:c@d.com" target="_blank" rel="noopener">c@d.com</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>3</td>
+<td><a href="mailto:a@b.com" target="_blank" rel="noopener">a@b.com</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>For example, your query should return the following for the above table:</p>
+<table>
+<thead>
+<tr>
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="mailto:a@b.com" target="_blank" rel="noopener">a@b.com</a></td>
+</tr>
+</tbody>
+</table>
+<p>Note: All emails are in lowercase.</p>
+<p><strong>知识点:GROUP BY</strong><br>这个问题主要是用来考察<code>GROUP BY</code>和一些聚合函数的用法，使用<code>COUNT</code>函数和<code>GROUP BY</code>即可以解决这道问题。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> Email</span><br><span class="line"><span class="keyword">FROM</span> Person</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> Email</span><br><span class="line"><span class="keyword">HAVING</span> <span class="keyword">COUNT</span>(Email)&gt;<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html" target="_blank" rel="noopener">1. MySql Handling of GROUP BY</a><br><a href="https://dev.mysql.com/doc/refman/8.0/en/group-by-handling.html" target="_blank" rel="noopener">2. Aggregate(GROUP BY) Functions</a></p>
+</blockquote>
+<h5 id="183-Customers-who-nerver-order"><a href="#183-Customers-who-nerver-order" class="headerlink" title="183. Customers who nerver order"></a>183. Customers who nerver order</h5><p>Suppose that a website contains two tables, the Customers table and the Orders table. Write a SQL query to find all customers who never order anything.</p>
+<p>Table: Customers.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Id</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1</td>
+<td>Joe</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>2</td>
+<td>Henry</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>3</td>
+<td>Sam</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>4</td>
+<td>Max</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Table: Orders.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Id</th>
+<th>CustomerId</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>2</td>
+<td>1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Using the above tables as example, return the following:</p>
+<table>
+<thead>
+<tr>
+<th>Customers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Henry</td>
+</tr>
+<tr>
+<td>Max</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Medium-Level"><a href="#Medium-Level" class="headerlink" title="Medium Level"></a>Medium Level</h4><h4 id="Hard-Level"><a href="#Hard-Level" class="headerlink" title="Hard Level"></a>Hard Level</h4>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/23/learn-vue-js/" rel="next" title="vue.js笔记">
+                <i class="fa fa-chevron-left"></i> vue.js笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/19/about-data-binding/" rel="prev" title="关于前端数据绑定">
+                关于前端数据绑定 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#LeetCode-SQL类题目总结"><span class="nav-number">1.</span> <span class="nav-text">LeetCode SQL类题目总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Easy-Level"><span class="nav-number">2.</span> <span class="nav-text">Easy Level</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#175-Combine-Two-Tables"><span class="nav-number">2.1.</span> <span class="nav-text">175. Combine Two Tables</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#176-Second-Highest-Salary"><span class="nav-number">2.2.</span> <span class="nav-text">176. Second Highest Salary</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#182-Duplicate-Emails"><span class="nav-number">2.3.</span> <span class="nav-text">182. Duplicate Emails</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#183-Customers-who-nerver-order"><span class="nav-number">2.4.</span> <span class="nav-text">183. Customers who nerver order</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Medium-Level"><span class="nav-number">3.</span> <span class="nav-text">Medium Level</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hard-Level"><span class="nav-number">4.</span> <span class="nav-text">Hard Level</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

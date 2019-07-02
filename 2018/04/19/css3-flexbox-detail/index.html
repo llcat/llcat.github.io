@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言由于前段时间在接触微信小程序后，看到官方文档中推荐使用flex box进行布局，经过查阅mdn文档和实际使用后，对flex box有了一定的概念。现对flex box的概念做总结和梳理。  什么是弹性盒子？ 使用弹性盒子布局能够带给我们什么好处？ 什么场景下我们可以使用弹性盒子？  一开始在接触到弹性盒子布局时，我内心是带着上面这些疑问的，不同于android提供给我们各种类型的layout(">
+<meta name="keywords" content="flexbox">
+<meta property="og:type" content="article">
+<meta property="og:title" content="css3弹性盒子详解">
+<meta property="og:url" content="https://llcat.github.io/2018/04/19/css3-flexbox-detail/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="前言由于前段时间在接触微信小程序后，看到官方文档中推荐使用flex box进行布局，经过查阅mdn文档和实际使用后，对flex box有了一定的概念。现对flex box的概念做总结和梳理。  什么是弹性盒子？ 使用弹性盒子布局能够带给我们什么好处？ 什么场景下我们可以使用弹性盒子？  一开始在接触到弹性盒子布局时，我内心是带着上面这些疑问的，不同于android提供给我们各种类型的layout(">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://llcat.github.io/2018/04/19/css3-flexbox-detail/flexbox.png">
+<meta property="og:image" content="https://llcat.github.io/2018/04/19/css3-flexbox-detail/flex-direction01.png">
+<meta property="og:image" content="https://llcat.github.io/2018/04/19/css3-flexbox-detail/flex-direction02.png">
+<meta property="og:image" content="https://llcat.github.io/2018/04/19/css3-flexbox-detail/flex-items-default-action.png">
+<meta property="og:updated_time" content="2019-03-13T13:41:07.535Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="css3弹性盒子详解">
+<meta name="twitter:description" content="前言由于前段时间在接触微信小程序后，看到官方文档中推荐使用flex box进行布局，经过查阅mdn文档和实际使用后，对flex box有了一定的概念。现对flex box的概念做总结和梳理。  什么是弹性盒子？ 使用弹性盒子布局能够带给我们什么好处？ 什么场景下我们可以使用弹性盒子？  一开始在接触到弹性盒子布局时，我内心是带着上面这些疑问的，不同于android提供给我们各种类型的layout(">
+<meta name="twitter:image" content="https://llcat.github.io/2018/04/19/css3-flexbox-detail/flexbox.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2018/04/19/css3-flexbox-detail/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>css3弹性盒子详解 | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2018/04/19/css3-flexbox-detail/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">css3弹性盒子详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-04-19 11:14:44" itemprop="dateCreated datePublished" datetime="2018-04-19T11:14:44+08:00">2018-04-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-13 21:41:07" itemprop="dateModified" datetime="2019-03-13T21:41:07+08:00">2019-03-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/css3/" itemprop="url" rel="index"><span itemprop="name">css3</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>由于前段时间在接触微信小程序后，看到官方文档中推荐使用flex box进行布局，经过查阅mdn文档和实际使用后，对flex box有了一定的概念。现对flex box的概念做总结和梳理。</p>
+<ul>
+<li>什么是弹性盒子？</li>
+<li>使用弹性盒子布局能够带给我们什么好处？</li>
+<li>什么场景下我们可以使用弹性盒子？</li>
+</ul>
+<p>一开始在接触到弹性盒子布局时，我内心是带着上面这些疑问的，不同于android提供给我们各种类型的layout(eg: LinearLayout, RelativeLayout, FrameLayout, ConstraintLayout…)，在之前的web前端页面的开发中，以我有限的css开发经验，基本上是基于文档流(行级元素和块级元素)并结合float及position属性来完成节点的布局，暂且不说这种方式的好坏，十几年来我们一直也是这样做的，css同样提供了新的布局方式供我们使用，也就是我们今天要说的主角-弹性盒子（Flex Box)。<br><a id="more"></a></p>
+<blockquote>
+<p><strong>推荐阅读文档</strong></p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Introduction_to_CSS" target="_blank" rel="noopener">MDN CSS Introduction</a> - 如果你对CSS不熟可以先看看这里</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Flexbox" target="_blank" rel="noopener">CSS Flex Box</a> - 弹性盒子介绍</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flexible_Box_Layout" target="_blank" rel="noopener">CSS Flexible Box Layout</a> - 弹性盒子布局</li>
+</ul>
+</blockquote>
+<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>Flex Box是一种一维的布局模型，之所以这么说是因为它一次只处理一个维度上的布局，一行或一列，在开始前我想先请大家记住下面几个概念，这几个概念是构建弹性盒子模型的基础。</p>
+<ul>
+<li>主轴(main axis)<br>主轴的方向由flex-direction决定</li>
+<li>交叉轴(cross axis)<br>垂直于你选择的主轴方向</li>
+<li>弹性容器(flex container)<br>包含弹性项目的父级元素，通过定义display:flex or display:inline-flex来指定弹性容器</li>
+<li>弹性项目(flex item)<br>弹性容器中的每个子元素都是弹性项目，弹性容器中的文本将被包裹为匿名弹性单元。</li>
+</ul>
+<p>我们通过下面这张图来了解flex box的基本概念。<br>tips:copy from mdn<br><img src="/2018/04/19/css3-flexbox-detail/flexbox.png" title="flexbox"></p>
+<h5 id="主轴"><a href="#主轴" class="headerlink" title="主轴"></a>主轴</h5><p>主轴的方向由flex-direction决定，可以取4个值：</p>
+<ul>
+<li>flex-direction: row</li>
+<li>flex-direction: row-reverse</li>
+<li>flex-direction: column</li>
+<li>flex-direction: column-reverse</li>
+</ul>
+<p>我们下面通过一个例子来看看这4个值分别是怎么工作的<br><a href="">flex-direction demo</a> </p>
+<img src="/2018/04/19/css3-flexbox-detail/flex-direction01.png" title="flex-direction:row and row-reverse">
+<img src="/2018/04/19/css3-flexbox-detail/flex-direction02.png" title="flex-direction:column and column-reverse">
+<h5 id="交叉轴"><a href="#交叉轴" class="headerlink" title="交叉轴"></a>交叉轴</h5><p>交叉轴的方向是垂直于主轴方向的，如果主轴方向设置为行方向(inline),则交叉轴方向为列方向(block),反之亦然。</p>
+<p>理解两个轴的概念又助于我们接下来学习各个属性的使用</p>
+<h5 id="Flex元素的默认行为"><a href="#Flex元素的默认行为" class="headerlink" title="Flex元素的默认行为"></a>Flex元素的默认行为</h5><p>当我们定义了一个flex容器后，容器中的所有直系子元素都会变成一个flex元素，所有的css属性都会有一个初始值，所以flex容器中的flex元素都会有以下默认行为。</p>
+<ul>
+<li>元素列为一行(flex-direction初始值为row)</li>
+<li>元素从主轴的起始线开始排列</li>
+<li>元素不会在主轴方向上拉伸，但是可以缩小</li>
+<li>元素被拉伸来填充交叉轴</li>
+<li>flex-basis 属性为auto</li>
+<li>flex-wrap 属性为 nowrap</li>
+</ul>
+<p>这样你的元素会呈线性排列，元素的大小即为主轴方向上的大小，如果有太多元素超出容器，他们会溢出不会换行，如果某个元素较高，其他元素也会被沿交叉轴方向拉伸,详见见<a href="">flex item default action</a></p>
+<img src="/2018/04/19/css3-flexbox-detail/flex-items-default-action.png" title="flex-items-default-action">
+<h5 id="CSS属性参考"><a href="#CSS属性参考" class="headerlink" title="CSS属性参考"></a>CSS属性参考</h5><ul>
+<li>应用于flex容器</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名称</th>
+<th style="text-align:center">属性概括</th>
+<th style="text-align:center">初始值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-direction" target="_blank" rel="noopener">flex-direction</a></td>
+<td style="text-align:center">指定容器主轴方向</td>
+<td style="text-align:center">row</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-wrap" target="_blank" rel="noopener">flex-wrap</a></td>
+<td style="text-align:center">指定容器是单行显示<br>还是多行显示</td>
+<td style="text-align:center">nowrap</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-flow" target="_blank" rel="noopener">flex-flow</a></td>
+<td style="text-align:center">flex-driection和<br>flex-wrap的简写</td>
+<td style="text-align:center">row nowrap</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/justify-content" target="_blank" rel="noopener">justify-content</a></td>
+<td style="text-align:center">定义了浏览器如何分配顺着<br>父容器主轴的弹性元素之间<br>及其周围的空间</td>
+<td style="text-align:center">normal</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/align-items" target="_blank" rel="noopener">align-items</a></td>
+<td style="text-align:center">以与justify-content相同的方式<br>在交叉轴方向上将当前行上的<br>弹性元素对齐。与align-content属性的<br>区别在于它指定了当前Flex容器的<strong>行中的<br>项目</strong>的对齐方式，而align-content<br>则指定了<strong>行自身</strong>的对齐方式</td>
+<td style="text-align:center">stretch</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/align-content" target="_blank" rel="noopener">align-content</a></td>
+<td style="text-align:center">指定了在交叉轴方向对容器中的<br>每一行的空间上的分配，所以<br>该属性只对多行弹性容器起作用，对单行弹性容器无效</td>
+<td style="text-align:center">stretch</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>应用于flex子项</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名称</th>
+<th style="text-align:center">属性概括</th>
+<th style="text-align:center">初始值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-grow" target="_blank" rel="noopener">flex-grow</a></td>
+<td style="text-align:center">定义弹性盒子子项的拉伸因子</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-shrink" target="_blank" rel="noopener">flex-shrink</a></td>
+<td style="text-align:center">属性指定了flex子项的收缩规则。<br>flex子项仅在默认宽度之和大于容器的时候才会<br>发生收缩，其收缩的大小是依据 flex-shrink 的值</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="">flex-basis</a></td>
+<td style="text-align:center">指定了flex子项在主轴方向上的初始大小。<br>如果不使用 box-sizing 来改变盒模型的话，<br>那么这个属性就决定了flex子项的内容盒（content-box）的宽或者高（取决于主轴的方向）</td>
+<td style="text-align:center">auto</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex" target="_blank" rel="noopener">flex</a></td>
+<td style="text-align:center">简写属性，可以同时设置flex-grow, flex-shrink与flex-basis</td>
+<td style="text-align:center">0 1 auto</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/align-self" target="_blank" rel="noopener">align-self</a></td>
+<td style="text-align:center">对齐当前flex行中的flex子项，并覆盖align-items的值. 如果任何flex子项的交叉方向margin值设置为auto，则会忽略align-self</td>
+<td style="text-align:center">auto</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/order" target="_blank" rel="noopener">order</a></td>
+<td style="text-align:center">属性规定了弹性容器中的可伸缩项目在布局时的顺序。<br>元素按照 order 属性的值的增序进行布局。<br>拥有相同 order 属性值的元素按照它们<br>在源代码中出现的顺序进行布局。</td>
+<td style="text-align:center">0</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>当前用于定义flex box的css属性就是上面列举的这些，大家可以根据这些属性是应用于容器还是子项元素来分类记忆。下面我会根据每个属性来写一个demo来进一步掌握弹性盒子的使用。</p>
+</blockquote>
+<h4 id="Flex-Box属性demo"><a href="#Flex-Box属性demo" class="headerlink" title="Flex Box属性demo"></a>Flex Box属性demo</h4><p><em>(1)flex-wrap</em><br><em>(2)flex-flow</em><br><em>(3)justify-content</em><br><em>(4)align-items</em><br><em>(5)align-content</em><br><em>(6)flex-grow</em><br><em>(7)flex-shrink</em><br><em>(8)flex-basis</em><br><em>(9)flex</em><br><em>(10)align-self</em><br><em>(11)order</em></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flexbox/" rel="tag"># flexbox</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/20/sql-base/" rel="next" title="SQL基础">
+                <i class="fa fa-chevron-left"></i> SQL基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/27/docker-introduction/" rel="prev" title="docker-introduction">
+                docker-introduction <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#主轴"><span class="nav-number">2.1.</span> <span class="nav-text">主轴</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#交叉轴"><span class="nav-number">2.2.</span> <span class="nav-text">交叉轴</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Flex元素的默认行为"><span class="nav-number">2.3.</span> <span class="nav-text">Flex元素的默认行为</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CSS属性参考"><span class="nav-number">2.4.</span> <span class="nav-text">CSS属性参考</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Flex-Box属性demo"><span class="nav-number">3.</span> <span class="nav-text">Flex Box属性demo</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

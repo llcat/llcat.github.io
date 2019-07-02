@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="初识c语言指针 作为一只java汪,平时不会去关注指针方面的知识,这两天在看csapp时,看见指针好像能做一些有趣的事情,决定把当初学C语言时把我弄的晕头转向的指针好好看看,总结一下。">
+<meta name="keywords" content="pointer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识C语言指针">
+<meta property="og:url" content="https://llcat.github.io/2018/11/26/first-meet-with-pointer/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="初识c语言指针 作为一只java汪,平时不会去关注指针方面的知识,这两天在看csapp时,看见指针好像能做一些有趣的事情,决定把当初学C语言时把我弄的晕头转向的指针好好看看,总结一下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://llcat.github.io/2018/11/26/first-meet-with-pointer/int_in_memory.png">
+<meta property="og:updated_time" content="2019-03-13T13:41:07.535Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初识C语言指针">
+<meta name="twitter:description" content="初识c语言指针 作为一只java汪,平时不会去关注指针方面的知识,这两天在看csapp时,看见指针好像能做一些有趣的事情,决定把当初学C语言时把我弄的晕头转向的指针好好看看,总结一下。">
+<meta name="twitter:image" content="https://llcat.github.io/2018/11/26/first-meet-with-pointer/int_in_memory.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2018/11/26/first-meet-with-pointer/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>初识C语言指针 | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2018/11/26/first-meet-with-pointer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">初识C语言指针
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-26 10:46:26" itemprop="dateCreated datePublished" datetime="2018-11-26T10:46:26+08:00">2018-11-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-13 21:41:07" itemprop="dateModified" datetime="2019-03-13T21:41:07+08:00">2019-03-13</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="初识c语言指针"><a href="#初识c语言指针" class="headerlink" title="初识c语言指针"></a>初识c语言指针</h4><p> 作为一只java汪,平时不会去关注指针方面的知识,这两天在看csapp时,看见指针好像能做一些有趣的事情,决定把当初学C语言时把我弄的晕头转向的指针好好看看,总结一下。  </p>
+<a id="more"></a>
+<h4 id="指针是什么？"><a href="#指针是什么？" class="headerlink" title="指针是什么？"></a>指针是什么？</h4><p>我们常常听一些大神说，指针很简单啊，无非是一个存着指向某个地址空间的变量而已，其实要弄懂这个，需要从了解计算到底是以一个怎样的形式来存储信息开始看。</p>
+<blockquote>
+<p>机器其实没有我们人这么聪明，他能快速理解的就是0,1这样的信息，也就是我们说的位，单纯的来讲，一个位并不能表示什么很有用的信息，但是如果我们用一段序列的位来表示信息，如8位来表示某个信息，算一算我们可以有多少种组合？如果32位呢？64位呢？  </p>
+</blockquote>
+<h4 id="信息的存储"><a href="#信息的存储" class="headerlink" title="信息的存储"></a>信息的存储</h4><p>在大多的计算机上使用8位的块为一个最小的可寻址单位，我们也称作字节，操作系统的形成是为了我们更方便的与底层硬件交互，操作系统提供给我们一个大的<code>虚拟存储器</code>，看起来像一个超级大的字节数组，每个字节都有唯一一个标识他的数字，也就是<code>地址</code>。</p>
+<p><strong>下面给出一个整数类型的变量在内存中存储的形式</strong><br><img src="/2018/11/26/first-meet-with-pointer/int_in_memory.png" title="int_in_memory"></p>
+<p>我们可以看到，一个int类型的变量是占了连续的4个字节的存储空间，但是在我们写的文本代码被编译器翻译成机器码时，机器会忽略变量的类型，对于机器码来说说，会被翻译成，从首地址地址0x100开始，向后读取4个字节。所以我们的一个int类型的变量可以用指针来读取，一个指向int类型的指针中存储的值就是某个int类型变量的首地址。指针也是一个变量，只是他有特殊的含义而已。<br>一般来说，一个指针变量所占的字节数与机器使用的字长有关，32位的机器使用4个字节来存储指针变量，64位的机器使用8个字节来存储指针，很好理解，因为指针是用来表示地址的，如果不是足够长度的位数来表示指针，那么对于内存较大的机器，会有一些存储空间根本无法访问。</p>
+<p><strong>一个关于指针的小例子</strong>  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>* byte_pointer;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_byte</span><span class="params">(byte_pointer start,<span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"0x"</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = len<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%.2x"</span>,start[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_int</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"show_int(%d):\n"</span>,x);</span><br><span class="line">    show_byte((byte_pointer)&amp;x,<span class="keyword">sizeof</span>(x));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_pointer</span><span class="params">(<span class="keyword">void</span> *x)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"参数x中存的内容:%x\n"</span>,x);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"参数x的地址:%x\n"</span>,&amp;x);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"show_pointer:\n"</span>);</span><br><span class="line">    show_byte((byte_pointer)&amp;x,<span class="keyword">sizeof</span>(x));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">12345</span>;</span><br><span class="line">    <span class="keyword">int</span> y = <span class="number">12346</span>;</span><br><span class="line">    <span class="keyword">int</span> *p_x = &amp;x;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"&amp;x(x变量的首地址)为:%x\n"</span>,&amp;x);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"*p_x : %d\n"</span>,*p_x);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"p_x : %x\n"</span>,p_x);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"y:%d\n&amp;y:%x\n*(p_x+1):%d\n"</span>,y,&amp;y,*(p_x+<span class="number">1</span>));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"p_x+1:%x\n"</span>,p_x+<span class="number">1</span>);</span><br><span class="line">    show_int(x);</span><br><span class="line">    show_int(y);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"&amp;p_x(p_x的首地址):%x\n"</span>,&amp;p_x);</span><br><span class="line">    show_pointer(p_x);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>某次运行的结果(os:linux 64 bit)：</p>
+</blockquote>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&amp;x(x变量的首地址)为:10f5328</span><br><span class="line">*p_x : 12345</span><br><span class="line">p_x : 10f5328</span><br><span class="line">y:12346</span><br><span class="line">&amp;y:10f532c</span><br><span class="line">*(p_x+1):12346</span><br><span class="line">p_x+1:10f532c</span><br><span class="line">show_int(12345):</span><br><span class="line">0x00003039</span><br><span class="line">show_int(12346):</span><br><span class="line">0x0000303a</span><br><span class="line">&amp;p_x(p_x的首地址):10f5330</span><br><span class="line">参数x中存的内容:10f5328</span><br><span class="line">参数x的地址:10f5308</span><br><span class="line">show_pointer:</span><br><span class="line">0x00007ffd010f5328</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对于上面的结果，我想提几个问题，看看大家能否答的上来</p>
+</blockquote>
+<ul>
+<li><code>p_x+1</code>为什么是<code>10f532c</code>而不是<code>10f5329</code>呢？</li>
+<li>验证下<code>0x3039</code>转换成十进制的值是<code>12345</code>吗？</li>
+<li>使用<code>show_pointer()</code>打印的<code>p_x</code>的值和直接打印的<code>p_x</code>的值少了4个字节(32位）,不是说指针在64位操作系统下是占8个字节吗？这里我也不明白</li>
+<li><code>show_pointer()</code>函数中的形参<code>x</code>的首地址和实参<code>p_x</code>的首地址差了多少？现在你明白为什么说传入参数时是对形参进行了一次赋值操作了吗？</li>
+<li>加个总结 c语言中<br>*:相当于取值操作<br>&amp;:取变量地址</li>
+</ul>
+<h4 id="五花八门的指针"><a href="#五花八门的指针" class="headerlink" title="五花八门的指针"></a>五花八门的指针</h4><p>我们经常被指针弄的晕头转向的原因就是关于指针有各种各样的操作，小小指针带来的灵活操作各有不同的名字 ，我们常常被这些名词唬住，什么指针常量，常量指针，指针变量，指针的指针，指针函数，函数指针。。。WTF?不要被这些概念弄混，我们要透过现象看本质。好好理解上面说的指针是什么，下面我们举例看看指针的各种用法吧。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pointer/" rel="tag"># pointer</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/19/about-data-binding/" rel="next" title="关于前端数据绑定">
+                <i class="fa fa-chevron-left"></i> 关于前端数据绑定
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/29/get-started-with-react/" rel="prev" title="React 入门">
+                React 入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#初识c语言指针"><span class="nav-number">1.</span> <span class="nav-text">初识c语言指针</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指针是什么？"><span class="nav-number">2.</span> <span class="nav-text">指针是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#信息的存储"><span class="nav-number">3.</span> <span class="nav-text">信息的存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#五花八门的指针"><span class="nav-number">4.</span> <span class="nav-text">五花八门的指针</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

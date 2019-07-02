@@ -64,10 +64,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
@@ -86,7 +86,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '6.3.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -108,18 +108,18 @@
 
 
 
-  <meta name="description" content="Vue.JS Study Note最近新的项目需要将原有的一个管理app替换为web app的形式以便于跨多个平台使用，在技术选型上我决定采用vue.js+element ui+echarts.js的方案去做。因此开一篇学习笔记用来整理和记录知识点。 1. Introduction2. 组件基础 基本示例组件时一个可复用的Vue实例，所以我们注册组件时传入的选项基本与new Vue()相同，除了如">
-<meta name="keywords" content="front end,vue.js">
+  <meta name="description" content="Vue.JS Study Note最近新的项目需要将原有的一个管理app替换为web app的形式以便于跨多个平台使用，在技术选型上我决定采用vue.js+element ui+echarts.js的方案去做。因此开一篇学习笔记用来整理和记录知识点。">
+<meta name="keywords" content="vue.js">
 <meta property="og:type" content="article">
-<meta property="og:title" content="learn-vue.js">
+<meta property="og:title" content="vue.js笔记">
 <meta property="og:url" content="https://llcat.github.io/2018/08/23/learn-vue-js/index.html">
 <meta property="og:site_name" content="llcat-blog">
-<meta property="og:description" content="Vue.JS Study Note最近新的项目需要将原有的一个管理app替换为web app的形式以便于跨多个平台使用，在技术选型上我决定采用vue.js+element ui+echarts.js的方案去做。因此开一篇学习笔记用来整理和记录知识点。 1. Introduction2. 组件基础 基本示例组件时一个可复用的Vue实例，所以我们注册组件时传入的选项基本与new Vue()相同，除了如">
+<meta property="og:description" content="Vue.JS Study Note最近新的项目需要将原有的一个管理app替换为web app的形式以便于跨多个平台使用，在技术选型上我决定采用vue.js+element ui+echarts.js的方案去做。因此开一篇学习笔记用来整理和记录知识点。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-27T13:45:49.905Z">
+<meta property="og:updated_time" content="2019-04-15T13:49:45.614Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="learn-vue.js">
-<meta name="twitter:description" content="Vue.JS Study Note最近新的项目需要将原有的一个管理app替换为web app的形式以便于跨多个平台使用，在技术选型上我决定采用vue.js+element ui+echarts.js的方案去做。因此开一篇学习笔记用来整理和记录知识点。 1. Introduction2. 组件基础 基本示例组件时一个可复用的Vue实例，所以我们注册组件时传入的选项基本与new Vue()相同，除了如">
+<meta name="twitter:title" content="vue.js笔记">
+<meta name="twitter:description" content="Vue.JS Study Note最近新的项目需要将原有的一个管理app替换为web app的形式以便于跨多个平台使用，在技术选型上我决定采用vue.js+element ui+echarts.js的方案去做。因此开一篇学习笔记用来整理和记录知识点。">
 
 
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>learn-vue.js | llcat-blog</title>
+  <title>vue.js笔记 | llcat-blog</title>
   
 
 
@@ -183,7 +183,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -232,17 +232,17 @@
         
         
           
-          <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
         
         
           
-          <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
         
@@ -306,7 +306,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="llcat(plyu)">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar128.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -318,7 +318,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">learn-vue.js
+          <h1 class="post-title" itemprop="name headline">vue.js笔记
               
             
           </h1>
@@ -360,11 +360,29 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-27 21:45:49" itemprop="dateModified" datetime="2018-08-27T21:45:49+08:00">2018-08-27</time>
+                <time title="修改时间：2019-04-15 21:49:45" itemprop="dateModified" datetime="2019-04-15T21:49:45+08:00">2019-04-15</time>
               
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/front-end/" itemprop="url" rel="index"><span itemprop="name">front-end</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -394,6 +412,7 @@
 
       
         <h4 id="Vue-JS-Study-Note"><a href="#Vue-JS-Study-Note" class="headerlink" title="Vue.JS Study Note"></a>Vue.JS Study Note</h4><p>最近新的项目需要将原有的一个管理app替换为web app的形式以便于跨多个平台使用，在技术选型上我决定采用<code>vue.js+element ui+echarts.js</code>的方案去做。因此开一篇学习笔记用来整理和记录知识点。</p>
+<a id="more"></a>
 <h5 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h5><h5 id="2-组件基础"><a href="#2-组件基础" class="headerlink" title="2. 组件基础"></a>2. 组件基础</h5><ul>
 <li><p>基本示例<br>组件时一个可复用的Vue实例，所以我们注册组件时传入的选项基本与<code>new Vue()</code>相同，除了如<code>el</code>这种根实例特有的选项。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Vue.component(<span class="string">"counter-button"</span>,&#123;</span><br><span class="line">  data: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      count:<span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">'&lt;button v-on:click="count++"&gt;you click me &#123;&#123;count&#125;&#125; times'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
@@ -416,7 +435,26 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Vue.component(<span class="string">"blog-post"</span>,&#123;</span><br><span class="line">  props:[<span class="string">"post"</span>],</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">  &lt;div class="blog-post"&gt;</span></span><br><span class="line"><span class="string">    &lt;h3&gt;&#123;&#123; post.title &#125;&#125;&lt;/h3&gt;</span></span><br><span class="line"><span class="string">    &lt;button v-on:click="$emit('enlargeFont')"&gt;</span></span><br><span class="line"><span class="string">      Enlarge text</span></span><br><span class="line"><span class="string">    &lt;/button&gt;</span></span><br><span class="line"><span class="string">    &lt;div v-html="post.content"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">"#app"</span>,</span><br><span class="line">  data: &#123;</span><br><span class="line">    posts: [</span><br><span class="line">      &#123;<span class="attr">id</span>:<span class="number">1</span>,<span class="attr">title</span>:<span class="string">"apple"</span>,<span class="attr">content</span>:<span class="string">"apple is good"</span>&#125;,</span><br><span class="line">      &#123;<span class="attr">id</span>:<span class="number">2</span>,<span class="attr">title</span>:<span class="string">"banana"</span>,<span class="attr">content</span>:<span class="string">"banana is yellow"</span>&#125;,</span><br><span class="line">      &#123;<span class="attr">id</span>:<span class="number">3</span>,<span class="attr">title</span>:<span class="string">"orange"</span>,<span class="attr">content</span>:<span class="string">"orange is acid"</span>&#125;</span><br><span class="line">    ],</span><br><span class="line">    fontSize: <span class="number">1</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">blog-post</span> <span class="attr">v-for</span>=<span class="string">"post is posts"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">v-bind:post</span>=<span class="string">"post"</span>,</span></span><br><span class="line"><span class="tag">             <span class="attr">v-on:enlargeFont</span>=<span class="string">"fontSize+0.1"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">blog-post</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
-<li></li>
+</ul>
+<h5 id="h-gt-h-App-是什么？"><a href="#h-gt-h-App-是什么？" class="headerlink" title="h =&gt; h(App)是什么？"></a>h =&gt; h(App)是什么？</h5><p>用vue-cli工具初始化的<code>main.js</code>中有这样一段代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  render: <span class="function"><span class="params">h</span> =&gt;</span> h(App)</span><br><span class="line">&#125;).$mount(<span class="string">'#app'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>看到这我其实是有疑问的, <code>h =&gt; h(App)</code>到底是指什么？那么查过官方文档后知道，在初始化一个Vue实例时，我们可以使用<code>render</code>函数渲染元素以代替template。Vue在调用render函数时会传入<code>createElement</code>这个函数做参数。那么实际上面的代码可以写成这样。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params">createElement</span>) </span>&#123;</span><br><span class="line">    createElement(App)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 简化为es箭头函数的写法就是这样</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  render: <span class="function"><span class="params">createElement</span> =&gt;</span> createElement(App)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>那么实际上<code>h</code>只是render函数参数名称的简写而已,你甚至可以写成<code>a</code>,<code>b</code>或任意的名字也可以。但是<code>h</code>这个简写实际上是有含义的，我查阅资料看到有人引用even you的解释如下。</p>
+<blockquote>
+<p>It comes from the term “hyperscript”, which is commonly used in many virtual-dom implementations. “Hyperscript” itself stands for “script that generates HTML structures” because HTML is the acronym for “hyper-text markup language”.<br>“h”这个缩写来源于”hyperscript”这个术语，这个术语被广泛应用于许多的虚拟dom的实现中，由于HTML是超文本标记语言的首字母缩写，”hyperscript”一词表示”用来生成HTML结构的脚本”</p>
+</blockquote>
+<h5 id="vue-cli-3-0生成的项目怎么使用sass"><a href="#vue-cli-3-0生成的项目怎么使用sass" class="headerlink" title="@vue/cli 3.0生成的项目怎么使用sass?"></a>@vue/cli 3.0生成的项目怎么使用sass?</h5><p>vue-cli生成的项目默认是支持Sass,Less,Stylus等Css预处理器的，因为它默认在webpack.config.js中就默认配置了这些预处理器。我们在创建完工程后只需要安装预处理器和相关的loader即可。比如我要安装sass<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D sass-loader node-sass</span><br></pre></td></tr></table></figure></p>
+<p>可是如果我们想给这些loader设置一些配置时我们应该怎么做呢？<br>我们应该在与<code>webpack.config.js</code>同级的目录下创建<code>vue.config.js</code>文件，并增加配置项。<br>比如我想在每个scss文件中自动导入包含常用变量的文件，这样省去手动import的过程。在<code>vue.config.js</code>中加入下面的内容。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    css: &#123;</span><br><span class="line">        loaderOptions: &#123;</span><br><span class="line">            sass: &#123;</span><br><span class="line">                data: <span class="string">`@import "@/styles/variables.scss";`</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><a href="https://cli.vuejs.org/zh/guide/css.html#css-modules" target="_blank" rel="noopener">参考文档</a></p>
+</blockquote>
+<h5 id="Vue工程怎么动态的使用本地图片。"><a href="#Vue工程怎么动态的使用本地图片。" class="headerlink" title="Vue工程怎么动态的使用本地图片。"></a>Vue工程怎么动态的使用本地图片。</h5><p>在我们编写组件时，有时候需要在组件中加载一些本地的图片，那么如果我们写成工作目录下的相对路径并绑定到<code>&lt;img :src=&quot;path&quot;&gt;</code>时是不生效的。因为src的信息是在程序build完成后动态附加的，也就是我们在build应用时webpack根本就不会处理<code>&lt;img&gt;</code>标签引入的资源(因为压根就没有引入)。所以我们有两种解决方式。</p>
+<ul>
+<li><p>手动import图片资源</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">nav</span> <span class="attr">class</span>=<span class="string">"nav-container"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">nav-item</span> <span class="attr">v-for</span>=<span class="string">"item in items"</span> <span class="attr">:imgSrc</span>=<span class="string">"item.imgSrc"</span> <span class="attr">:text</span>=<span class="string">"item.text"</span> <span class="attr">:key</span>=<span class="string">"item.id"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">nav-item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> NavItem <span class="keyword">from</span> <span class="string">'./NavItem'</span>;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> pimg <span class="keyword">from</span> <span class="string">'@/assets/img/personal_info.png'</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">        name: <span class="string">"NavBar"</span>,</span></span><br><span class="line"><span class="undefined">        components: &#123;</span></span><br><span class="line"><span class="undefined">            NavItem,</span></span><br><span class="line"><span class="undefined">        &#125;,</span></span><br><span class="line"><span class="undefined">        data()&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="undefined">                items: [</span></span><br><span class="line"><span class="undefined">                    &#123;</span></span><br><span class="line"><span class="undefined">                        id: 1,</span></span><br><span class="line"><span class="undefined">                        imgSrc: pimg,</span></span><br><span class="line"><span class="javascript">                        text: <span class="string">"个人信息"</span></span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                ]</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用require引入资源<br>注意require仅接收一串字符，不接受任何的变量。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">nav</span> <span class="attr">class</span>=<span class="string">"nav-container"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">nav-item</span> <span class="attr">v-for</span>=<span class="string">"item in items"</span> <span class="attr">:imgSrc</span>=<span class="string">"item.imgSrc"</span> <span class="attr">:text</span>=<span class="string">"item.text"</span> <span class="attr">:key</span>=<span class="string">"item.id"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">nav-item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> NavItem <span class="keyword">from</span> <span class="string">'./NavItem'</span>;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">        name: <span class="string">"NavBar"</span>,</span></span><br><span class="line"><span class="undefined">        components: &#123;</span></span><br><span class="line"><span class="undefined">            NavItem,</span></span><br><span class="line"><span class="undefined">        &#125;,</span></span><br><span class="line"><span class="undefined">        data()&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="undefined">                items: [</span></span><br><span class="line"><span class="undefined">                    &#123;</span></span><br><span class="line"><span class="undefined">                        id: 1,</span></span><br><span class="line"><span class="javascript">                        imgSrc: <span class="built_in">require</span>(<span class="string">'@/assets/img/personal_info.png'</span>),</span></span><br><span class="line"><span class="javascript">                        text: <span class="string">"个人信息"</span></span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                ]</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 
       
@@ -438,8 +476,6 @@
       
         <div class="post-tags">
           
-            <a href="/tags/front-end/" rel="tag"># front end</a>
-          
             <a href="/tags/vue-js/" rel="tag"># vue.js</a>
           
         </div>
@@ -453,8 +489,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/05/technology-notes/" rel="next" title="technology_notes">
-                <i class="fa fa-chevron-left"></i> technology_notes
+              <a href="/2018/07/24/learn-english-day-by-day/" rel="next" title="learn english day by day">
+                <i class="fa fa-chevron-left"></i> learn english day by day
               </a>
             
           </div>
@@ -462,6 +498,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/25/leetcode-sql-summary/" rel="prev" title="LeetCode(SQL Summary)">
+                LeetCode(SQL Summary) <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -520,6 +560,10 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
               <p class="site-author-name" itemprop="name">llcat(plyu)</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
@@ -531,7 +575,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -550,7 +594,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -585,7 +647,27 @@
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -616,6 +698,24 @@
 
           
           
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
 
           
             
@@ -635,7 +735,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Vue-JS-Study-Note"><span class="nav-number">1.</span> <span class="nav-text">Vue.JS Study Note</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">1. Introduction</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-组件基础"><span class="nav-number">1.2.</span> <span class="nav-text">2. 组件基础</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Vue-JS-Study-Note"><span class="nav-number">1.</span> <span class="nav-text">Vue.JS Study Note</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">1. Introduction</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-组件基础"><span class="nav-number">1.2.</span> <span class="nav-text">2. 组件基础</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#h-gt-h-App-是什么？"><span class="nav-number">1.3.</span> <span class="nav-text">h =&gt; h(App)是什么？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#vue-cli-3-0生成的项目怎么使用sass"><span class="nav-number">1.4.</span> <span class="nav-text">@vue/cli 3.0生成的项目怎么使用sass?</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Vue工程怎么动态的使用本地图片。"><span class="nav-number">1.5.</span> <span class="nav-text">Vue工程怎么动态的使用本地图片。</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -655,7 +755,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -669,15 +769,9 @@
 
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
 
 
 
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
 
 
 
@@ -730,6 +824,8 @@
 
 
 
+  
+
 
 
 
@@ -755,6 +851,11 @@
   
   
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 

@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一起看看Map容器吧之前学习Java容器类时做的笔记, 做为从wiznote中转移的第一篇文章, 主要是探讨了一下map容器, 我们如何去写一个hashmap? Java自带的hashmap底层实现是怎么样的呢? 带着这些问题,看看我们下面的内容吧!  写一个自己的简单map 关于散列和散列码 更进一步,如何写个HashMap容器">
+<meta name="keywords" content="java,collections">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java的Map容器">
+<meta property="og:url" content="https://llcat.github.io/2017/04/19/java-map-collection/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="一起看看Map容器吧之前学习Java容器类时做的笔记, 做为从wiznote中转移的第一篇文章, 主要是探讨了一下map容器, 我们如何去写一个hashmap? Java自带的hashmap底层实现是怎么样的呢? 带着这些问题,看看我们下面的内容吧!  写一个自己的简单map 关于散列和散列码 更进一步,如何写个HashMap容器">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://llcat.github.io/2017/04/19/java-map-collection/how_to_hash.png">
+<meta property="og:image" content="https://llcat.github.io/2017/04/19/java-map-collection/abstract_map.jpg">
+<meta property="og:updated_time" content="2019-04-10T14:46:19.689Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java的Map容器">
+<meta name="twitter:description" content="一起看看Map容器吧之前学习Java容器类时做的笔记, 做为从wiznote中转移的第一篇文章, 主要是探讨了一下map容器, 我们如何去写一个hashmap? Java自带的hashmap底层实现是怎么样的呢? 带着这些问题,看看我们下面的内容吧!  写一个自己的简单map 关于散列和散列码 更进一步,如何写个HashMap容器">
+<meta name="twitter:image" content="https://llcat.github.io/2017/04/19/java-map-collection/how_to_hash.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2017/04/19/java-map-collection/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java的Map容器 | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2017/04/19/java-map-collection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java的Map容器
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-04-19 15:31:36" itemprop="dateCreated datePublished" datetime="2017-04-19T15:31:36+08:00">2017-04-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-10 22:46:19" itemprop="dateModified" datetime="2019-04-10T22:46:19+08:00">2019-04-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="一起看看Map容器吧"><a href="#一起看看Map容器吧" class="headerlink" title="一起看看Map容器吧"></a>一起看看Map容器吧</h4><p>之前学习Java容器类时做的笔记, 做为从wiznote中转移的第一篇文章, 主要是探讨了一下map容器, 我们如何去写一个hashmap? Java自带的hashmap底层实现是怎么样的呢? 带着这些问题,看看我们下面的内容吧!</p>
+<ul>
+<li><a href="#my_map">写一个自己的简单map</a></li>
+<li><a href="#about_hash">关于散列和散列码</a></li>
+<li><a href="#my_hash_map">更进一步,如何写个HashMap容器</a></li>
+</ul>
+<a id="more"></a>
+<h5 id="my_map">写一个自己的简单map</h5>
+
+<p>我们来深入看看Map容器，他是如何工作的，有哪些类型的Map容器，我们如何选择自己需要的Map容器。<br>通常map容器也被叫做映射表，或者是关联数组，因为他是用来存储一组相关联的数据，即一组键值对，在标准的java容器类中包含下面几种类型的MAP实现:</p>
+<ul>
+<li>HashMap</li>
+<li>TreeMap</li>
+<li>LinkedHashMap</li>
+<li>WeakHashMap</li>
+<li><p>ConcurrentHashMap</p>
+<p>它们根据一些实际需求，在查找，键值对的保存顺序，是否支持并发而有一些不同的实现。我们今天不对他们的全部进行探讨,选取其中用的较多的hashmap来看一下吧。</p>
+<p><strong>step 1</strong><br>首先我们实现一个最简单的Map容器，他的底层是个数组，不支持扩展大小，查询效率也非常低，并且他不能对键值的唯一性保证。如下：</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MappingTable</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Object[][] pairs;</span><br><span class="line">	<span class="keyword">int</span> index;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MappingTable</span><span class="params">(<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">		pairs = <span class="keyword">new</span> Object[length][<span class="number">2</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key,V value)</span></span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;index;i++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(key.equals(pairs[i][<span class="number">0</span>]))&#123;</span><br><span class="line">				pairs[i]=<span class="keyword">new</span> Object[]&#123;key,value&#125;;</span><br><span class="line">				<span class="keyword">return</span> ;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(index&gt;=pairs.length)&#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> ArrayIndexOutOfBoundsException();</span><br><span class="line">		&#125;</span><br><span class="line">		pairs[index++] = <span class="keyword">new</span> Object[]&#123;key,value&#125;;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span></span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;pairs.length;i++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(key.equals(pairs[i][<span class="number">0</span>]))&#123;</span><br><span class="line">				<span class="keyword">return</span> (V)pairs[i][<span class="number">1</span>];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">		StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;index;i++)&#123;</span><br><span class="line">			builder.append(pairs[i][<span class="number">0</span>].toString());</span><br><span class="line">			builder.append(<span class="string">" : "</span>);</span><br><span class="line">			builder.append(pairs[i][<span class="number">1</span>].toString());</span><br><span class="line">			<span class="keyword">if</span>(index&gt;i)</span><br><span class="line">				builder.append(<span class="string">"\n"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> builder.toString();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		MappingTable&lt;String,String&gt; map = <span class="keyword">new</span> MappingTable&lt;String,String&gt;(<span class="number">5</span>);</span><br><span class="line">		map.put(<span class="string">"kaka"</span>,<span class="string">"15"</span>);</span><br><span class="line">		map.put(<span class="string">"lisa"</span>,<span class="string">"20"</span>);</span><br><span class="line">		map.put(<span class="string">"yita"</span>,<span class="string">"18"</span>);</span><br><span class="line">		System.out.println(map);</span><br><span class="line">		System.out.println(map.get(<span class="string">"lisa"</span>));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个map实现的比较简单，可以看到上面我们自己实现的容器，无论是存放，还是取值，都要进行一次线性的查找，如果是几十个数据量还好，但是如果一个Map集合中想要存放成千上万个元素呢？难道我们每次都要从头到尾遍历一遍？这效率想想就低的可怕哈，有没有一种可以直接访问的方法，所以java类库的Map实现就引入了HashCode（散列码）的方式来取代对键值的缓慢的线性查找。在根类Object中，有一个hashCode()方法，他是一个native方法，默认是根据对象的某些信息转换得到的，理论上是相对唯一的，所有java对象都可以生成自己的散列码，而HashMap就是通过对象的散列码进行快速查询的。下面我们继续看看散列是啥。</p>
+<h5 id="about_hash">散列和散列码</h5>
+
+<p>在看散列前，我们先看一个关于Hashmap的例子。测试Java中的hashmap到底是依靠什么进行工作的，是通过equals()方法保证键值的唯一吗？我们自己编写的类，不覆写hashcode()方法，存放在hash类型的集合中，能保证唯一吗？来看看吧！</p>
+<p>先来看一个例子，如果我们编写自己的类作为HashMap的键，不覆写他的hashCode(）方法，看看HashMap能否正常工作。</p>
+<blockquote>
+<p>射击运动员（键） — Shooter<br>他的射击靶数（值）— TargetNum</p>
+</blockquote>
+<p>Shooter类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> ch17.deepincontainers;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Shooter</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Shooter</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.id = id;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Shooter#"</span>+id;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TargetNum类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> ch17.deepincontainers;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TargetNum</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Random rand = <span class="keyword">new</span> Random();</span><br><span class="line">	String targetNum = String.format(<span class="string">"TargetNum is %.2f"</span>, rand.nextDouble()*<span class="number">10</span>);</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> targetNum;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TestHashMap类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> ch17.deepincontainers;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Map.Entry;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestHashMap</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		testHashMap(Shooter.class);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span>&lt;T extends Shooter&gt; <span class="function"><span class="keyword">void</span> <span class="title">testHashMap</span><span class="params">(Class&lt;T&gt; type)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		Map&lt;Shooter,TargetNum&gt; map = <span class="keyword">new</span> HashMap&lt;Shooter,TargetNum&gt;();</span><br><span class="line">		Constructor&lt;T&gt; cons = type.getConstructor(<span class="keyword">int</span>.class);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">			map.put(cons.newInstance(i), <span class="keyword">new</span> TargetNum());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(Entry e:map.entrySet())&#123;</span><br><span class="line">			System.out.println(e+<span class="string">" hashcode: "</span>+e.getKey().hashCode());</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">"-------after put------"</span>);</span><br><span class="line">		map.put(cons.newInstance(<span class="number">3</span>),<span class="keyword">new</span> TargetNum());</span><br><span class="line">		<span class="keyword">for</span>(Entry e:map.entrySet())&#123;</span><br><span class="line">			System.out.println(e+<span class="string">" hashcode: "</span>+e.getKey().hashCode());</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">"-----can i get by my key-----"</span>);</span><br><span class="line">		System.out.println(map.get(cons.newInstance(<span class="number">3</span>)));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看看下面的输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Shooter#8=TargetNum is 0.04 hashcode: 621009875</span><br><span class="line">Shooter#1=TargetNum is 8.33 hashcode: 1735600054</span><br><span class="line">Shooter#4=TargetNum is 3.46 hashcode: 1836019240</span><br><span class="line">Shooter#6=TargetNum is 7.27 hashcode: 1173230247</span><br><span class="line">Shooter#9=TargetNum is 1.71 hashcode: 1265094477</span><br><span class="line">* Shooter#3=TargetNum is 8.01 hashcode: 2133927002 </span><br><span class="line">Shooter#5=TargetNum is 7.66 hashcode: 325040804</span><br><span class="line">Shooter#0=TargetNum is 4.58 hashcode: 356573597</span><br><span class="line">Shooter#2=TargetNum is 7.02 hashcode: 21685669</span><br><span class="line">Shooter#7=TargetNum is 1.47 hashcode: 856419764</span><br><span class="line">-------after put------</span><br><span class="line">Shooter#8=TargetNum is 0.04 hashcode: 621009875</span><br><span class="line">Shooter#1=TargetNum is 8.33 hashcode: 1735600054</span><br><span class="line">* Shooter#3=TargetNum is 2.07 hashcode: 2125039532</span><br><span class="line">Shooter#4=TargetNum is 3.46 hashcode: 1836019240</span><br><span class="line">Shooter#6=TargetNum is 7.27 hashcode: 1173230247</span><br><span class="line">Shooter#9=TargetNum is 1.71 hashcode: 1265094477</span><br><span class="line">* Shooter#3=TargetNum is 8.01 hashcode: 2133927002</span><br><span class="line">Shooter#5=TargetNum is 7.66 hashcode: 325040804</span><br><span class="line">Shooter#0=TargetNum is 4.58 hashcode: 356573597</span><br><span class="line">Shooter#2=TargetNum is 7.02 hashcode: 21685669</span><br><span class="line">Shooter#7=TargetNum is 1.47 hashcode: 856419764</span><br><span class="line">-----can i get by my key-----</span><br><span class="line">null</span><br></pre></td></tr></table></figure>
+<p>结果显然是不能正常工作，不仅相同的键值被重复添加在map中呢，并且不能正常取值。在看hashmap的源码前，我们在进行下其他的猜想，其一，是不是没有覆写对象的equals方法导致添加了重复的键值，其二，没有覆写对象的hashcode方法导致我们无法取值，既然如此，我们在写两个类测试下。</p>
+<p>class ShooterJustOverEquals:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShooterJustOverEquals</span> <span class="keyword">extends</span> <span class="title">Shooter</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ShooterJustOverEquals</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(id);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> obj <span class="keyword">instanceof</span> ShooterJustOverEquals &amp;&amp;</span><br><span class="line">				<span class="keyword">this</span>.getId() == ((ShooterJustOverEquals) obj).getId();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">"ShooterJustOverEquals:"</span>+getId();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		TestHashMap.testHashMap(ShooterJustOverEquals.class);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">ShooterJustOverEquals:8=TargetNum is 3.04 hashcode: 621009875</span><br><span class="line">ShooterJustOverEquals:1=TargetNum is 4.70 hashcode: 1735600054</span><br><span class="line">ShooterJustOverEquals:4=TargetNum is 7.44 hashcode: 1836019240</span><br><span class="line">ShooterJustOverEquals:6=TargetNum is 2.52 hashcode: 1173230247</span><br><span class="line">ShooterJustOverEquals:9=TargetNum is 6.13 hashcode: 1265094477</span><br><span class="line">* ShooterJustOverEquals:3=TargetNum is 4.84 hashcode: 2133927002</span><br><span class="line">ShooterJustOverEquals:5=TargetNum is 4.85 hashcode: 325040804</span><br><span class="line">ShooterJustOverEquals:0=TargetNum is 5.97 hashcode: 356573597</span><br><span class="line">ShooterJustOverEquals:2=TargetNum is 8.69 hashcode: 21685669</span><br><span class="line">ShooterJustOverEquals:7=TargetNum is 9.17 hashcode: 856419764</span><br><span class="line">-------after put------</span><br><span class="line">ShooterJustOverEquals:8=TargetNum is 3.04 hashcode: 621009875</span><br><span class="line">ShooterJustOverEquals:1=TargetNum is 4.70 hashcode: 1735600054</span><br><span class="line">* ShooterJustOverEquals:3=TargetNum is 3.35 hashcode: 2125039532</span><br><span class="line">ShooterJustOverEquals:4=TargetNum is 7.44 hashcode: 1836019240</span><br><span class="line">ShooterJustOverEquals:6=TargetNum is 2.52 hashcode: 1173230247</span><br><span class="line">ShooterJustOverEquals:9=TargetNum is 6.13 hashcode: 1265094477</span><br><span class="line">* ShooterJustOverEquals:3=TargetNum is 4.84 hashcode: 2133927002</span><br><span class="line">ShooterJustOverEquals:5=TargetNum is 4.85 hashcode: 325040804</span><br><span class="line">ShooterJustOverEquals:0=TargetNum is 5.97 hashcode: 356573597</span><br><span class="line">ShooterJustOverEquals:2=TargetNum is 8.69 hashcode: 21685669</span><br><span class="line">ShooterJustOverEquals:7=TargetNum is 9.17 hashcode: 856419764</span><br><span class="line">-----can i get by my key-----</span><br><span class="line">null</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们覆写了equls方法，但是没有起作用，我可以猜测是不是要结合hashcode方法才能生效呢？我们接下来继续试一把</p>
+<p>ShooterOverEqualsAndHashcode:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShooterOverEqAndHashcode</span> <span class="keyword">extends</span> <span class="title">ShooterJustOverEquals</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ShooterOverEqAndHashcode</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(id);</span><br><span class="line">		<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> getId();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">"ShooterOverEqAndHashcode#"</span>+getId();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		TestHashMap.testHashMap(ShooterOverEqAndHashcode.class);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">ShooterOverEqAndHashcode#0=TargetNum is 6.34 hashcode: 0</span><br><span class="line">ShooterOverEqAndHashcode#1=TargetNum is 1.33 hashcode: 1</span><br><span class="line">ShooterOverEqAndHashcode#2=TargetNum is 1.13 hashcode: 2</span><br><span class="line">ShooterOverEqAndHashcode#3=TargetNum is 6.43 hashcode: 3</span><br><span class="line">ShooterOverEqAndHashcode#4=TargetNum is 4.49 hashcode: 4</span><br><span class="line">ShooterOverEqAndHashcode#5=TargetNum is 9.18 hashcode: 5</span><br><span class="line">ShooterOverEqAndHashcode#6=TargetNum is 0.67 hashcode: 6</span><br><span class="line">ShooterOverEqAndHashcode#7=TargetNum is 2.66 hashcode: 7</span><br><span class="line">ShooterOverEqAndHashcode#8=TargetNum is 8.27 hashcode: 8</span><br><span class="line">ShooterOverEqAndHashcode#9=TargetNum is 4.49 hashcode: 9</span><br><span class="line">-------after put------</span><br><span class="line">ShooterOverEqAndHashcode#0=TargetNum is 6.34 hashcode: 0</span><br><span class="line">ShooterOverEqAndHashcode#1=TargetNum is 1.33 hashcode: 1</span><br><span class="line">ShooterOverEqAndHashcode#2=TargetNum is 1.13 hashcode: 2</span><br><span class="line">ShooterOverEqAndHashcode#3=TargetNum is 2.92 hashcode: 3</span><br><span class="line">ShooterOverEqAndHashcode#4=TargetNum is 4.49 hashcode: 4</span><br><span class="line">ShooterOverEqAndHashcode#5=TargetNum is 9.18 hashcode: 5</span><br><span class="line">ShooterOverEqAndHashcode#6=TargetNum is 0.67 hashcode: 6</span><br><span class="line">ShooterOverEqAndHashcode#7=TargetNum is 2.66 hashcode: 7</span><br><span class="line">ShooterOverEqAndHashcode#8=TargetNum is 8.27 hashcode: 8</span><br><span class="line">ShooterOverEqAndHashcode#9=TargetNum is 4.49 hashcode: 9</span><br><span class="line">-----can i get by my key-----</span><br><span class="line">TargetNum is 2.92</span><br></pre></td></tr></table></figure>
+<p>这回我们看到，HashMap正常在工作呢，我们调转到hashmap的源码中去看看两个关键位置的操作</p>
+<ol>
+<li>put({key : value})</li>
+<li>get(key)</li>
+</ol>
+<p>发现Hashmap的底层实现是这样的，我们用一张图来说明：</p>
+<img src="/2017/04/19/java-map-collection/how_to_hash.png" title="how_to_hash">  
+<h5 id="my_hash_map">更进一步,如何写个HashMap容器</h5>
+
+<p>现在我们知道了散列的原理，那么实现一个简单的HashMap也就没那么困难呢，我们接下来也尝试实现一个简单的SimpleHashMap，在此之前，先和大家来看看一个标准的map容器是一个怎么样的大体结构，我们来仿照这个结构编写我们的hashmap</p>
+<img src="/2017/04/19/java-map-collection/abstract_map.jpg" title="map_structure">
+<p>AbstractMap&lt;K,V&gt;这个抽象基类，这个基类包含了一个抽象方法public abstract Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet(),这个entrySet是用来存放键值对的集合的，我们实际的键值存放在Entry&lt;K,V&gt;中。这个Entry由我们自己提供，或者使用系统提供给我们的两个默认实现，SimpleEntry和SimpleImmutableEntry。</p>
+<p>那么我们按照这个结构，编写一个自己的hash map容器类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> ch17.deepincontainers;</span><br><span class="line"><span class="keyword">import</span> java.util.AbstractMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleHashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> SIZE = <span class="number">97</span>;</span><br><span class="line">	<span class="keyword">private</span> LinkedList&lt;Entry&lt;K,V&gt;&gt;[] buckets = <span class="keyword">new</span> LinkedList[<span class="number">97</span>];</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> index = key==<span class="keyword">null</span>?<span class="number">0</span>:(key.hashCode()%SIZE);</span><br><span class="line">		<span class="keyword">if</span>(buckets[index] == <span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		V value = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">for</span>(Entry&lt;K,V&gt; e : buckets[index])&#123;</span><br><span class="line">			<span class="keyword">if</span>(e.getKey()==<span class="keyword">null</span>)&#123;</span><br><span class="line">				value = e.getValue();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(e.getKey().equals(key))&#123;</span><br><span class="line">				value = e.getValue();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> value;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		V oldValue = get(key);</span><br><span class="line">		<span class="keyword">int</span> index = key==<span class="keyword">null</span>?<span class="number">0</span>:(key.hashCode()%SIZE);</span><br><span class="line">		<span class="keyword">if</span>(buckets[index]==<span class="keyword">null</span>)&#123;</span><br><span class="line">			buckets[index] = <span class="keyword">new</span> LinkedList&lt;Entry&lt;K,V&gt;&gt;();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(buckets[index].size()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">			<span class="keyword">for</span>(Entry&lt;K,V&gt;e:buckets[index])&#123;</span><br><span class="line">				<span class="keyword">if</span>(e.getKey()==<span class="keyword">null</span>)&#123;</span><br><span class="line">					buckets[index].remove(e);</span><br><span class="line">					buckets[index].add(<span class="keyword">new</span> SimpleEntry(key, value));</span><br><span class="line">				&#125;<span class="keyword">else</span> <span class="keyword">if</span>(e.getKey().equals(key))&#123;</span><br><span class="line">					buckets[index].remove(e);</span><br><span class="line">					buckets[index].add(<span class="keyword">new</span> SimpleEntry(key, value));</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			buckets[index].add(<span class="keyword">new</span> SimpleEntry&lt;K,V&gt;(key,value)); </span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> oldValue;	</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> V <span class="title">remove</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> index = key==<span class="keyword">null</span> ? <span class="number">0</span> : (key.hashCode()%SIZE);</span><br><span class="line">		<span class="keyword">if</span>(buckets[index]==<span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		V value = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">for</span>(Entry&lt;K,V&gt; e : buckets[index])&#123;</span><br><span class="line">			<span class="keyword">if</span>(e.getKey()==<span class="keyword">null</span>)&#123;</span><br><span class="line">				value = e.getValue();</span><br><span class="line">				buckets[index].remove(e);</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(e.getKey().equals(key))&#123;</span><br><span class="line">				value = e.getValue();</span><br><span class="line">				buckets[index].remove(e);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> value ;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> Set&lt;java.util.Map.Entry&lt;K, V&gt;&gt; entrySet() &#123;</span><br><span class="line">		Set&lt;Entry&lt;K,V&gt;&gt; set =<span class="keyword">new</span> HashSet&lt;Entry&lt;K,V&gt;&gt;();</span><br><span class="line">		<span class="keyword">for</span>(List&lt;Entry&lt;K,V&gt;&gt; list:buckets)&#123;</span><br><span class="line">			<span class="keyword">if</span>(list==<span class="keyword">null</span>)&#123;</span><br><span class="line">				<span class="keyword">continue</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span>&#123;</span><br><span class="line">				set.addAll(list);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> set;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		SimpleHashMap&lt;String,Integer&gt; map = <span class="keyword">new</span> SimpleHashMap&lt;String,Integer&gt;();</span><br><span class="line">		map.put(<span class="keyword">null</span>, <span class="number">1</span>);</span><br><span class="line">		map.put(<span class="keyword">null</span>, <span class="number">2</span>);</span><br><span class="line">		map.put(<span class="string">"llcat"</span>, <span class="number">25</span>);</span><br><span class="line">		System.out.println(map.get(<span class="keyword">null</span>));</span><br><span class="line">		System.out.println(map.get(<span class="string">"llcat"</span>));</span><br><span class="line">		<span class="keyword">for</span>(Entry&lt;String,Integer&gt; e:map.entrySet())</span><br><span class="line">			System.out.println(e.getKey());</span><br><span class="line">		map.remove(<span class="keyword">null</span>);</span><br><span class="line">		System.out.println(map.get(<span class="keyword">null</span>));</span><br><span class="line">		map.remove(<span class="string">"llcat"</span>);</span><br><span class="line">		System.out.println(map.get(<span class="string">"llcat"</span>));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们只覆写了几个常用的方法，其目的是理解散列到底是如何工作的。到此为止，我们应该对Map容器有了进一步的了解，希望大家可以去看看HashMap的源码实现。接下来我们看看如何给自己的类覆写一个好的hashCode()方法，比如像我们上面那样为shoooter类覆写的hashcode不是理想的实现，不好的hash值可能会导致将所有的键值对散列到了集中的几个桶位，这样导致散列的不够平均，查询速度也会慢上很多。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/collections/" rel="tag"># collections</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/13/hexo-githubpages-make-blog/" rel="next" title="hexo+githubpages搭建个人blog">
+                <i class="fa fa-chevron-left"></i> hexo+githubpages搭建个人blog
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/20/sql-base/" rel="prev" title="SQL基础">
+                SQL基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一起看看Map容器吧"><span class="nav-number">1.</span> <span class="nav-text">一起看看Map容器吧</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#my_map"><span class="nav-number">1.1.</span> <span class="nav-text">写一个自己的简单map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#about_hash"><span class="nav-number">1.2.</span> <span class="nav-text">散列和散列码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#my_hash_map"><span class="nav-number">1.3.</span> <span class="nav-text">更进一步,如何写个HashMap容器</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

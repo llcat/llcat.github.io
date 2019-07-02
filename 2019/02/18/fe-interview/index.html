@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言在开始这篇博文前，我想以提几个问题的方式来总结自己写这篇文章的目的和意义，方便整理清楚往下面写这篇文章的思路。">
+<meta name="keywords" content="interview">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端知识点集锦">
+<meta property="og:url" content="https://llcat.github.io/2019/02/18/fe-interview/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="前言在开始这篇博文前，我想以提几个问题的方式来总结自己写这篇文章的目的和意义，方便整理清楚往下面写这篇文章的思路。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-23T10:36:33.447Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端知识点集锦">
+<meta name="twitter:description" content="前言在开始这篇博文前，我想以提几个问题的方式来总结自己写这篇文章的目的和意义，方便整理清楚往下面写这篇文章的思路。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2019/02/18/fe-interview/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>前端知识点集锦 | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2019/02/18/fe-interview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端知识点集锦
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-18 14:58:09" itemprop="dateCreated datePublished" datetime="2019-02-18T14:58:09+08:00">2019-02-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-23 18:36:33" itemprop="dateModified" datetime="2019-05-23T18:36:33+08:00">2019-05-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/front-end/" itemprop="url" rel="index"><span itemprop="name">front-end</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>在开始这篇博文前，我想以提几个问题的方式来总结自己写这篇文章的目的和意义，方便整理清楚往下面写这篇文章的思路。</p>
+<a id="more"></a>
+<ol>
+<li><p>写这篇文章的起因是什么？为什么需要写这样一篇文章？<br>起因是准备换工作，由于公司的业务场景及职位的界定，导致当前的这份工作涉及的领域比较多，很难在某一领域内专精和突破，本人自身希望的职业发展是能够在某个方向上完成纵向的深入后在进行横向的发展。我比较赞同观点是人的精力是有限的，追求面面俱到的结果往往是面面俱不到。所以我需要更换一份职业界定更明显的工作，那么结合自己之前所做的工作，我决定深耕前端领域。虽然在前端领域我已经有了很多的积累，但是，特定到某些比较小的知识点时，我发现自己是不能快速的给出解答的(典型的文档查阅工程师，但在自己记忆模棱两可时，查文档几乎是在最快的解决方案)，那么这样对于后续的笔面试必然是十分不利的，写这样一篇文章可以方便自己整理，归纳，复习。</p>
+</li>
+<li><p>准备从什么方向入手？<br>从个人的目的上来讲，我应该从两个方面入手，一个是短期内的知识点突破，即用来应对笔面试的问题，另一个方面是着重于自身技能的一个checklist,即假设为一个合格的前端开发工程师，有哪些技能和知识点是需要掌握或了解的。</p>
+</li>
+<li><p>文章应该以怎样的形式呈现？<br>应该是以问答的形式来编写，首先提出问题，然后做出解答。对于需要花费较大篇幅回答的问题，可以另开文章以便给出详细的解析，在问题下给出链接即可。</p>
+</li>
+</ol>
+<blockquote>
+<p>我准备参考github上的关于前端面试的几个开源项目，如有雷同，纯属copy</p>
+<ul>
+<li><a href="https://github.com/h5bp/Front-end-Developer-Interview-Questions" target="_blank" rel="noopener">FE Interview Question</a></li>
+<li><a href="https://github.com/yangshun/front-end-interview-handbook" target="_blank" rel="noopener">The Answer of FE InterView Question</a></li>
+<li><a href="https://github.com/Jobeir/front-end-interview-preparation-guide" target="_blank" rel="noopener">The Preparation Guide for FE InterView</a></li>
+<li><a href="https://github.com/iliakan/javascript-tutorial-en" target="_blank" rel="noopener">The Modern JavaScript Tutorial</a></li>
+</ul>
+</blockquote>
+<h4 id="ES6新特性"><a href="#ES6新特性" class="headerlink" title="ES6新特性"></a>ES6新特性</h4><p>常见的有如let, const, 解构赋值，Promise, async/await, Proxy, Symbol,</p>
+<h4 id="JS中有哪些数据类型"><a href="#JS中有哪些数据类型" class="headerlink" title="JS中有哪些数据类型"></a>JS中有哪些数据类型</h4><p>Number, Boolean, String, Null, Undefine, Object, Symbol</p>
+<h4 id="前端模块化有那些规范"><a href="#前端模块化有那些规范" class="headerlink" title="前端模块化有那些规范"></a>前端模块化有那些规范</h4><p>AMD, CMD, CommonJs, ES的module(import, export)</p>
+<h4 id="JS的异步加载有那几种方式"><a href="#JS的异步加载有那几种方式" class="headerlink" title="JS的异步加载有那几种方式"></a>JS的异步加载有那几种方式</h4><h4 id="说一下你了解的盒子模型"><a href="#说一下你了解的盒子模型" class="headerlink" title="说一下你了解的盒子模型"></a>说一下你了解的盒子模型</h4><p>IE的怪异盒子模型, 标准盒子模型(content, padding, border, margin)</p>
+<h4 id="你用过box-sizing属性吗"><a href="#你用过box-sizing属性吗" class="headerlink" title="你用过box-sizing属性吗"></a>你用过box-sizing属性吗</h4><p>content-box, border-box</p>
+<h4 id="说一下你用过的伪类"><a href="#说一下你用过的伪类" class="headerlink" title="说一下你用过的伪类"></a>说一下你用过的伪类</h4><p>:hover, :link, :visited, :active, :focus</p>
+<h4 id="你用过那些CSS选择器"><a href="#你用过那些CSS选择器" class="headerlink" title="你用过那些CSS选择器"></a>你用过那些CSS选择器</h4><p>选择器大致上可以分为下面几类：</p>
+<ul>
+<li><p>简单选择器<br>比如我们常见的元素选择器，类选择器，id选择器，用以匹配一个或多个元素。</p>
+</li>
+<li><p>属性选择器<br>通过属性或属性值匹配一个或多个元素。</p>
+</li>
+<li><p>伪类选择器<br>匹配处于某个特定状态的一个或多个元素。</p>
+</li>
+<li><p>伪元素<br>匹配处于相关位置的一个或多个元素，如每个段落的第一个字，或某个元素的第一个子元素或最后一个子元素。</p>
+</li>
+<li><p>组合器<br>用来组合使用我们的选择器，可以用于非常特定的选择。<br>组合器有下面这几种</p>
+<ul>
+<li>后代选择器<br>eg：<code>A B</code>,匹配A节点下的B节点，即B是A的子元素或者B是A的子元素的子元素。</li>
+<li>子选择器<br>eg: <code>A&gt;B</code>匹配B元素，满足条件：B是A的直接字节点。</li>
+<li>相邻兄弟选择器<br>eg: <code>A+B</code>,B是A的下一个兄弟节点，AB拥有相同的父节点，并且B紧跟在A后面。</li>
+<li>通用兄弟选择器<br>eg: <code>A~B</code>,匹配B元素，满足B是A之后的任意一个兄弟节点(AB拥有相同的父节点，B在A之后，但B不一定紧挨着A)</li>
+</ul>
+</li>
+<li><p>多重选择器<br>用’,’隔开的多个选择器，可以将一组声明用于多个选择器的所有元素。</p>
+</li>
+</ul>
+<h4 id="说一下CSS各个选择器的优先级"><a href="#说一下CSS各个选择器的优先级" class="headerlink" title="说一下CSS各个选择器的优先级"></a>说一下CSS各个选择器的优先级</h4><h4 id="怎么清除浮动？"><a href="#怎么清除浮动？" class="headerlink" title="怎么清除浮动？"></a>怎么清除浮动？</h4><p><a href="https://juejin.im/post/59e7190bf265da4307025d91" target="_blank" rel="noopener">清除浮动的4种方式</a><br><a href="https://juejin.im/entry/580479b85bbb50005b7c5083" target="_blank" rel="noopener">CSS浮动和清除浮动</a></p>
+<h4 id="请使用正则表达式匹配一个身份证号码是否正确"><a href="#请使用正则表达式匹配一个身份证号码是否正确" class="headerlink" title="请使用正则表达式匹配一个身份证号码是否正确"></a>请使用正则表达式匹配一个身份证号码是否正确</h4><p><a href="https://juejin.im/post/5aa8d89af265da23866f9669" target="_blank" rel="noopener">正则匹配身份证</a></p>
+<h4 id="em和rem单位的区别"><a href="#em和rem单位的区别" class="headerlink" title="em和rem单位的区别"></a>em和rem单位的区别</h4><h4 id="浏览器的事件机制"><a href="#浏览器的事件机制" class="headerlink" title="浏览器的事件机制"></a>浏览器的事件机制</h4><ul>
+<li>怎么实现点击页面任何一个位置，alert点击的标签名字？<br>这个实现其实很简单，主要是考察对浏览器事件机制的熟悉程度,<br>查阅文档可知，浏览器的事件分为三个阶段,Capturing -&gt; At-Target -&gt; Bubbling<br>默认的Event在构造时是设置bubbles属性为false的。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">"click"</span>,(e)=&gt;&#123;alert(e.target.tagName)&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="a标签的有那几个伪类？"><a href="#a标签的有那几个伪类？" class="headerlink" title="a标签的有那几个伪类？"></a>a标签的有那几个伪类？</h4><p><code>&lt;a&gt;</code>标签有下面4个伪类:</p>
+<ul>
+<li><code>:link</code><br>当有链接属性的时候显示(即<code>&lt;a href=&quot;index.html&quot;&gt;&lt;/a&gt;</code>)。</li>
+<li><code>:visited</code><br>链接的地址被访问过时。</li>
+<li><code>:hover</code><br>鼠标移动到dom节点上时。</li>
+<li><code>:active</code><br>鼠标点击瞬间。</li>
+</ul>
+<p>几个需要注意的地方：</p>
+<ul>
+<li><p><code>:link</code> and <code>:visited</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        a:link &#123;</span></span><br><span class="line"><span class="undefined">            color: rgb(34, 211, 63);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        a:visited &#123;</span></span><br><span class="line"><span class="undefined">            color: rgba(255, 0, 0, 0.733);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 无href,不会显示link和visited的样式 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span>&gt;</span>no href<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 特例：href为""时会显示visited的样式 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span>&gt;</span>href is ""<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">        没访问前都是link样式,访问过后是visited样式。</span></span><br><span class="line"><span class="comment">        chrome中是根据历史记录来确定是link还是visited样式的，</span></span><br><span class="line"><span class="comment">        所以刷新页面不会更改一个链接已访问过的事实，除非清空历史记录,</span></span><br><span class="line"><span class="comment">        否则对于已访问过的链接显示visited的样式，在其他的浏览器中这点可能不同(如edge),</span></span><br><span class="line"><span class="comment">        还有浏览器的隐私模式下等特例。</span></span><br><span class="line"><span class="comment">     --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://llcat.tech"</span>&gt;</span>href is http://llcat.tech<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>href is #<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#/"</span>&gt;</span>href is #/<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#test"</span>&gt;</span>href is #test<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/test/test.html"</span>&gt;</span>href is /test/test.html<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 特殊：执行js不会记录到历史中，所以点击后不会显示visited,只显示link样式 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert(0)"</span>&gt;</span>href is javascript:alert(0)<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>:hover</code>和<code>:active</code><br><code>:active</code>应该永远放在<code>:hover</code>后面，因为鼠标移动到某个元素上时并进行了点击操作时，会同时出发<code>:hover</code>和<code>:active</code>，但是<code>:active</code>是一瞬间的样式，所以如果在<code>:hover</code>后面则会被覆盖掉不显示。</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        .hover-before-active:hover &#123;</span></span><br><span class="line"><span class="undefined">            background: rgb(34, 118, 214);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .hover-before-active:active &#123;</span></span><br><span class="line"><span class="undefined">            background: rgb(23, 170, 84);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .hover-after-active:active &#123;</span></span><br><span class="line"><span class="undefined">            background: rgb(23, 170, 84);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .hover-after-active:hover &#123;</span></span><br><span class="line"><span class="undefined">            background: rgb(34, 118, 214);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span> <span class="attr">class</span>=<span class="string">"hover-before-active"</span>&gt;</span>hover-before-active<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span> <span class="attr">class</span>=<span class="string">"hover-after-active"</span>&gt;</span>hover-after-active<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>:hover</code>和<code>visited</code><br><code>:visited</code>应该放在<code>:hover</code>之前，因为如果<code>:hover</code>放在<code>:visited</code>之后，一个已访问过的标签永远不会显示<code>:hover</code>效果，它会被<code>:visited</code>覆盖。<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        .hover-before-visited:hover &#123;</span></span><br><span class="line"><span class="undefined">            color: rgb(34, 118, 214);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .hover-before-visited:visited &#123;</span></span><br><span class="line"><span class="undefined">            color: rgb(23, 170, 84);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .hover-after-visited:visited &#123;</span></span><br><span class="line"><span class="undefined">            color: rgb(23, 170, 84);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .hover-after-visited:hover &#123;</span></span><br><span class="line"><span class="undefined">            color: rgb(34, 118, 214);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span> <span class="attr">class</span>=<span class="string">"hover-before-visited"</span>&gt;</span>hover-before-visited<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span> <span class="attr">class</span>=<span class="string">"hover-after-visited"</span>&gt;</span>hover-after-visited<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>总结下：<br>如果我们需要设置<code>&lt;a&gt;</code>标签的伪类，需要避免<code>:hover</code>和<code>:active</code>的冲突以及<code>:hover</code>和<code>:visited</code>的冲突。那么我们可以给这三个伪类排个序就是visited &lt; hover &lt; active，最后在最前面加上link即可。按照联想记忆法可以记成这样，lv-ha(love -&gt; hate)。</p>
+<h4 id="GET方法和POST方法的区别"><a href="#GET方法和POST方法的区别" class="headerlink" title="GET方法和POST方法的区别"></a>GET方法和POST方法的区别</h4><h4 id="说一说Vue-Router你有用到那些钩子函数。"><a href="#说一说Vue-Router你有用到那些钩子函数。" class="headerlink" title="说一说Vue Router你有用到那些钩子函数。"></a>说一说Vue Router你有用到那些钩子函数。</h4><h4 id="说一下Vue的生命周期"><a href="#说一下Vue的生命周期" class="headerlink" title="说一下Vue的生命周期"></a>说一下Vue的生命周期</h4><h4 id="CSS中有那些居中方式"><a href="#CSS中有那些居中方式" class="headerlink" title="CSS中有那些居中方式"></a>CSS中有那些居中方式</h4>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/interview/" rel="tag"># interview</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/03/add-zh-CN-locales-and-fonts-in-docker-images/" rel="next" title="给Docker镜像(Debian)添加中文支持和中文字体">
+                <i class="fa fa-chevron-left"></i> 给Docker镜像(Debian)添加中文支持和中文字体
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/21/about-base64/" rel="prev" title="你应该知道的Base64内容传输编码">
+                你应该知道的Base64内容传输编码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ES6新特性"><span class="nav-number">2.</span> <span class="nav-text">ES6新特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JS中有哪些数据类型"><span class="nav-number">3.</span> <span class="nav-text">JS中有哪些数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#前端模块化有那些规范"><span class="nav-number">4.</span> <span class="nav-text">前端模块化有那些规范</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JS的异步加载有那几种方式"><span class="nav-number">5.</span> <span class="nav-text">JS的异步加载有那几种方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说一下你了解的盒子模型"><span class="nav-number">6.</span> <span class="nav-text">说一下你了解的盒子模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#你用过box-sizing属性吗"><span class="nav-number">7.</span> <span class="nav-text">你用过box-sizing属性吗</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说一下你用过的伪类"><span class="nav-number">8.</span> <span class="nav-text">说一下你用过的伪类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#你用过那些CSS选择器"><span class="nav-number">9.</span> <span class="nav-text">你用过那些CSS选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说一下CSS各个选择器的优先级"><span class="nav-number">10.</span> <span class="nav-text">说一下CSS各个选择器的优先级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#怎么清除浮动？"><span class="nav-number">11.</span> <span class="nav-text">怎么清除浮动？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请使用正则表达式匹配一个身份证号码是否正确"><span class="nav-number">12.</span> <span class="nav-text">请使用正则表达式匹配一个身份证号码是否正确</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#em和rem单位的区别"><span class="nav-number">13.</span> <span class="nav-text">em和rem单位的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器的事件机制"><span class="nav-number">14.</span> <span class="nav-text">浏览器的事件机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#a标签的有那几个伪类？"><span class="nav-number">15.</span> <span class="nav-text">a标签的有那几个伪类？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GET方法和POST方法的区别"><span class="nav-number">16.</span> <span class="nav-text">GET方法和POST方法的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说一说Vue-Router你有用到那些钩子函数。"><span class="nav-number">17.</span> <span class="nav-text">说一说Vue Router你有用到那些钩子函数。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说一下Vue的生命周期"><span class="nav-number">18.</span> <span class="nav-text">说一下Vue的生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CSS中有那些居中方式"><span class="nav-number">19.</span> <span class="nav-text">CSS中有那些居中方式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Getting Started with React Tips:本文章是React官方推荐给初学者的一篇博文，涵盖了React核心的的知识点并将引导你如何使用React工作,在此翻译该篇博文以供大家共同学习。原文链接:getting-started-with-react推荐英语基础较好的同学直接阅读原文  我自从学习JavaScript开始就听过React的大名，但我大致浏览了下官方文档就把我吓到">
+<meta name="keywords" content="react.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React 入门">
+<meta property="og:url" content="https://llcat.github.io/2018/11/29/get-started-with-react/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="Getting Started with React Tips:本文章是React官方推荐给初学者的一篇博文，涵盖了React核心的的知识点并将引导你如何使用React工作,在此翻译该篇博文以供大家共同学习。原文链接:getting-started-with-react推荐英语基础较好的同学直接阅读原文  我自从学习JavaScript开始就听过React的大名，但我大致浏览了下官方文档就把我吓到">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-10T14:46:19.671Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React 入门">
+<meta name="twitter:description" content="Getting Started with React Tips:本文章是React官方推荐给初学者的一篇博文，涵盖了React核心的的知识点并将引导你如何使用React工作,在此翻译该篇博文以供大家共同学习。原文链接:getting-started-with-react推荐英语基础较好的同学直接阅读原文  我自从学习JavaScript开始就听过React的大名，但我大致浏览了下官方文档就把我吓到">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2018/11/29/get-started-with-react/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>React 入门 | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2018/11/29/get-started-with-react/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">React 入门
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-29 10:54:35" itemprop="dateCreated datePublished" datetime="2018-11-29T10:54:35+08:00">2018-11-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-10 22:46:19" itemprop="dateModified" datetime="2019-04-10T22:46:19+08:00">2019-04-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/translation/" itemprop="url" rel="index"><span itemprop="name">translation</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Getting-Started-with-React"><a href="#Getting-Started-with-React" class="headerlink" title="Getting Started with React"></a>Getting Started with React</h4><blockquote>
+<p><strong>Tips:</strong><br>本文章是React官方推荐给初学者的一篇博文，涵盖了React核心的的知识点并将引导你如何使用React工作,在此翻译该篇博文以供大家共同学习。原文链接:<a href="https://www.taniarascia.com/getting-started-with-react/" target="_blank" rel="noopener">getting-started-with-react</a>推荐英语基础较好的同学直接阅读原文</p>
+</blockquote>
+<p>我自从学习<code>JavaScript</code>开始就听过<code>React</code>的大名，但我大致浏览了下官方文档就把我吓到了，<code>HTML</code>和<code>JavaScript</code>混合的写在一起，我想这不是我们应该去避免的吗？那么<code>React</code>到底解决了什么问题？</p>
+<p>在经过对<code>React</code>的失败尝试后，作为替换，我专注于原生的<code>JavaScript</code>学习并在专业环境中使用<code>JQuery</code>完成开发。但最终我还是决定掌握它，我开始明白为什么我想要用<code>React</code>来代替原生<code>Js</code>或<code>JQuery</code>.</p>
+<p>我尝试去精炼我曾经学过的知识到一篇比较友善的介绍文章中并分享给你，跟着下面的介绍一步步学习吧。</p>
+<a id="more"></a>
+<p><strong>先决条件</strong></p>
+<p>在学习<code>React</code>前你需要具有一些基本的知识点，如果你之前从没有使用过<code>JavaScript</code>或者了解过<code>DOM</code>的知识，那么我建议你先去熟悉下下面这些知识后再来学习React</p>
+<ul>
+<li>基础的了解<a href="https://internetingishard.com/" target="_blank" rel="noopener">HTML&amp;CSS</a></li>
+<li>关于<a href="https://www.digitalocean.com/community/tutorial_series/how-to-code-in-javascript" target="_blank" rel="noopener">JavaScript</a>编程的基础知识</li>
+<li>对<a href="https://www.digitalocean.com/community/tutorial_series/understanding-the-dom-document-object-model" target="_blank" rel="noopener">DOM</a>基础的理解</li>
+<li>熟悉<a href="https://www.taniarascia.com/es6-syntax-and-feature-overview/" target="_blank" rel="noopener">ES6的语法和特性</a></li>
+<li>安装了<a href="https://www.taniarascia.com/how-to-install-and-use-node-js-and-npm-mac-and-windows/" target="_blank" rel="noopener">Node.js和npm</a></li>
+</ul>
+<p><strong>学习目标</strong></p>
+<ul>
+<li>学习<code>React</code>必要的概念和相关的术语，比如：Babel,Webpack,JSX,components,props,state和lifecycle.</li>
+<li>构建一个简单的React应用来演示上面提到的这些概念。</li>
+</ul>
+<h4 id="What-is-React？"><a href="#What-is-React？" class="headerlink" title="What is React？"></a>What is React？</h4><ul>
+<li>React是最流行的JavaScript库之一，在github已经有超过10w+的star呢</li>
+<li>React不是一个框架(不同于Angular,Angular显得更死板些)</li>
+<li>React是FaceBook贡献的开源项目</li>
+<li>React用于构建前端用户界面</li>
+<li>在一个MVC应用中，React属于视图层(View Layer)</li>
+</ul>
+<p>React中最重要的一点是你可以创建组件，看起来像是自定义的，可复用的HTML元素，支持快速有效的构建出用户界面，同时,通过使用<code>state</code>和<code>props</code>,React可以使数据的存储和处理更高效。</p>
+<h4 id="Set-up-and-Installation"><a href="#Set-up-and-Installation" class="headerlink" title="Set up and Installation"></a>Set up and Installation</h4><p>有几种方式可以安装React,我将会展示两种方法，你可以选择你喜欢的一种方式来工作。</p>
+<h5 id="静态HTML文件中引入"><a href="#静态HTML文件中引入" class="headerlink" title="静态HTML文件中引入"></a>静态HTML文件中引入</h5><p>第一种方法不是现在主流使用React的方式，我们在后面的实例中也不会选用这种方式，但如果你曾经使用过JQuery等库，那么你会对这种方式比较熟悉，也易于理解。至少没有让你一开始就直面不熟悉的Webpack,Babel和Node.js那么可怕。</p>
+<p>让我们开始新建一个基本的<code>index.html</code>文件，在头部从CDN引入React,React DOM,Babel三个文件,并创建一个<code>div</code>节点并指定其id为<code>root</code>,最后创建一个<code>script</code>标签用来编写我们自己的代码。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!Doctype html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>Hello React!<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://unpkg.com/react@16/umd/react.development.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://unpkg.com/react-dom@16/umd/react-dom.development.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://unpkg.com/babel-standalone@6.26.0/babel.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"root"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/babel"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>我是引用了最新稳定版本的库在我写这篇文章时。</p>
+<ul>
+<li><a href="https://reactjs.org/docs/react-api.html" target="_blank" rel="noopener">React</a> React顶层API</li>
+<li><a href="https://reactjs.org/docs/react-dom.html" target="_blank" rel="noopener">React DOM</a> DOM特定的方法</li>
+<li><a href="https://babeljs.io/" target="_blank" rel="noopener">Babel</a> 一个JavaScript编译器，可以让我们在旧浏览器中使用ES6+的新特性</li>
+</ul>
+<p>我们应用的入口点是依照惯例命名为<code>root</code>这个div元素，你可能还注意到了类型为<code>text/babel</code>的script标签，这是使用Babel强制要求的。</p>
+<p>现在，让我们开始编写React应用的第一行代码，我们将会使用ES6的classes去创建一个React的组件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来，添加一个<code>render()</code>方法，这是一个类组件中唯一要求的方法，他是用来渲染一个DOM节点的。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="comment">// ....</span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>return</code>中，我们将会放置一个类似于简单的HTML元素的东西，注意，我们并不是返回一个字符串，所以在这个元素两边不要使用引号，这种写法叫做<code>JSX</code>，我们将在后面对他做进一步的学习。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;h1&gt;Hello React!<span class="xml"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最后，我们使用React DOM提供的<code>render()</code>方法在<code>root</code>这个<code>div</code>节点中渲染我们的<code>App</code>这个类。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span>/&gt;</span></span>,<span class="built_in">document</span>.getElementById(<span class="string">'root'</span>))</span><br></pre></td></tr></table></figure></p>
+<p>这是<code>index.html</code>中完整的代码<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Hello React!<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://unpkg.com/react@16/umd/react.development.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://unpkg.com/react-dom@16/umd/react-dom.development.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://unpkg.com/babel-standalone@6.26.0/babel.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"root"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/babel"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123; </span></span><br><span class="line"><span class="undefined">            render() &#123; </span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> (</span></span><br><span class="line"><span class="javascript">                    &lt;h1&gt;Hello world!<span class="xml"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span></span><br><span class="line"><span class="undefined">                ); </span></span><br><span class="line"><span class="undefined">            &#125; </span></span><br><span class="line"><span class="undefined">        &#125; </span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> /&gt;</span>, document.getElementById('root'));</span></span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>现在如果你在浏览器中打开<code>index.html</code>,你就会看到<code>h1</code>这个标签被渲染在DOM中呢。</p>
+<p>做到这一步你已经可以看到，使用React并不是那么的可怕，它仅仅是一个JavaScript的库并且我们可以载入到我们的HTML中，到此我们完成了演示的目的，解析来我们会使用另一种方式创建React应用-<code>Create React App</code></p>
+<h5 id="Create-React-App"><a href="#Create-React-App" class="headerlink" title="Create React App"></a>Create React App</h5><p>像我们上面在静态HTML页面中引入相应的JavaScript库文件的方式，对于后续的代码变更不是那么高效而且较难维护。</p>
+<p>幸运的是，FaceBook为我们提供了<a href="https://github.com/facebook/create-react-app" target="_blank" rel="noopener">Create React App</a>工具，它会为我们预先配置你构建React App时需要的一切东西。它将会为我们创建一个开发用的server,使用Webpack去自动编译React,JSX和ES6,为CSS规则自动添加前缀，并使用ESLint来测试和警告代码中的错误。</p>
+<p>安装<code>create-react-app</code>,只需要在你指定的工作路径下运行下面的指令即可，确保你的Node.js版本高于<code>5.2</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx create-react-app react-tutorial</span><br></pre></td></tr></table></figure>
+<p>一旦你完成安装后，移动到你的最新创建的目录下并启动工程<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> react-tutorial</span><br><span class="line">npm start</span><br></pre></td></tr></table></figure></p>
+<p>一旦你运行了上面的指令，你可以在浏览器输入<code>localhost:3000</code>看到你新的React应用。</p>
+<p>如果你研究下项目结构，你会看到一个<code>/public</code>和<code>/src</code>文件夹，以及常见的<code>node_modules</code>,<code>.gitignore</code>,<code>README.md</code>和<code>package.json</code>等文件.</p>
+<p>在<code>/public</code>中，最重要的文件是<code>index.html</code>，非常类似于我们之前创建的静态HTML文件，仅有一个<code>root</code>div节点，但是这次没有使用<code>script</code>引入js库文件，所有的React代码都放置在<code>/src</code>目录下。</p>
+<p>我们可以看到这套开发环境会自动帮我们编译和更新我们的代码，你可以尝试修改<code>/src/App.js</code><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Edit &lt;code&gt;src/App.js&lt;<span class="regexp">/code&gt; and save to reload.</span></span><br></pre></td></tr></table></figure></p>
+<p>你可以尝试替换上面的内容为任何的文本，修改保存后，在<code>localhost:3000</code>重新编译并刷新为你修改后的界面。</p>
+<p>接下来，我们删掉<code>/src</code>目录下的所有文件，我们会新建自己的一套模板文件，仅保留<code>index.js</code>和<code>index.css</code>.</p>
+<p>对于<code>index.css</code>，我个人是将<a href="https://taniarascia.github.io/primitive/css/main.css" target="_blank" rel="noopener">Primitive CSS</a>中的内容拷贝过来呢，你可以使用Bootstrap或者任意的CSS框架，或者什么都不改，仅仅是我个人感觉这样做会更方便。</p>
+<p>那么现在在<code>index.js</code>中，我们导入React,ReactDOM,和CSS文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./index.css'</span></span><br></pre></td></tr></table></figure>
+<p>让我们再次创建<code>App</code>组件，之前我们已经有了一个<code>&lt;h1&gt;</code>,现在我们添加一个带有类声明的div元素，你可以注意到我们使用了<code>className</code>来代替<code>class</code>，这是我们需要注意的第一个点，我们所写的JavaScript并不是HTML<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div className=<span class="string">"App"</span>&gt;</span><br><span class="line">                &lt;h1&gt;Hello, React!<span class="xml"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>最后，我们跟之前一样将组件<code>&lt;App /&gt;</code>渲染到root节点上<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> /&gt;</span>, document.getElementById('root'))</span></span><br></pre></td></tr></table></figure></p>
+<p>下面是我们完整的<code>index.js</code>，这次我们直接引入了<code>Component</code>作为React的属性。所以我们可以不需要从<code>React.Component</code>继承呢</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./index.css'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div className=<span class="string">"App"</span>&gt;</span><br><span class="line">                &lt;h1&gt;Hello, React!<span class="xml"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(&lt;App /</span>&gt;, <span class="built_in">document</span>.getElemntById(<span class="string">'root'</span>));</span><br></pre></td></tr></table></figure>
+<p>这个时候你在返回<code>localhost:3000</code>窗口看看，你可以看到“Hello, React!”像我们之前的一样。到此，我们已经初步掌握了如何构建一个React应用。</p>
+<h5 id="React开发者工具"><a href="#React开发者工具" class="headerlink" title="React开发者工具"></a>React开发者工具</h5><p>这里有一个插件叫React开发者工具，他可以帮助更轻松的使用React工作，下载<a href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi" target="_blank" rel="noopener">React DevTools for Chrome</a>或者任意的你想使用的浏览器。</p>
+<h4 id="JSX-JavaScript-XML"><a href="#JSX-JavaScript-XML" class="headerlink" title="JSX:JavaScript + XML"></a>JSX:JavaScript + XML</h4><p>正如你之前看到的，我们已经在我们的React代码中使用了看起来HYTML样式的代码，但它不是HTML,他被称之为<strong>JSX</strong>,表示JavaScript XML.</p>
+<p>有了JSX,我们就可以写类似HTML的代码，并且可以创建XML-like的标签，下面的JSX看起来像赋值给一个变量.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> heading = <span class="xml"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">"site-heading"</span>&gt;</span>Hello, React!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>在我们编写React代码时，使用JSX并非是强制要求的，我们可以使用<code>createElement</code>方法，这个方法需要传入标签名称，一个包含属性的对象和一个子元素，可以渲染出相同的信息，下面的代码与我们使用JSX效果是一样的<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> heading = React.createElement(</span><br><span class="line">    <span class="string">'h1'</span>,</span><br><span class="line">    &#123;<span class="attr">className</span>:<span class="string">'site-heading'</span>&#125;,</span><br><span class="line">    <span class="string">'Hello, React!'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>JSX更近似于JavaScript而不是HTML,所以在编写代码时我们需要注意下面几点：</p>
+<ul>
+<li>当你给元素添加CSS类时，使用<code>className</code>用来替换<code>class</code>，因为<code>class</code>在JavaScript中保留的关键字</li>
+<li>属性和方法名在JSX中统一采用驼峰写法，比如<code>onclick</code>应该写成<code>onClick</code>.</li>
+<li>自闭和的标签必须以<code>/</code>终结，比如<code>&lt;img /&gt;</code></li>
+</ul>
+<p>JavaScript的表达式可以被使用花括号<code>{}</code>内嵌在JSX中使用，包括变量，函数和属性。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">'Tania'</span></span><br><span class="line"><span class="keyword">const</span> heading = <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, &#123;name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>JSX非常容易书写和理解相比于使用原生的Js创建和添加一堆元素来看，这也是非常多的人喜欢React的原因之一。</p>
+<h4 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h4><p>到此为止，我们已经创建过一个<code>App</code>组件，在React中几乎所有的一切都是由组件组成的，组件分为<em>类型组件</em>(class components)和<em>函数组件</em>(simple components)</p>
+<p>众多的React应用都有很多小的组件，并且所有的组件都被加载到主<code>App</code>组件中，每个组件可以拥有自己的文件，因此我们尝试来改变下我们的项目。</p>
+<p>从<code>index.js</code>中去掉我们的App <code>class</code>，看起来像下面这样<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./App'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./index.css'</span>;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> /&gt;</span>, document.getElementById('root'))</span></span><br></pre></td></tr></table></figure></p>
+<p>接下来我们创建一个新的文件叫<code>App.js</code>并在其中编写我们的组件<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div className=<span class="string">"App"</span>&gt;</span><br><span class="line">                &lt;h1&gt;Hello, React&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>div&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App;</span><br></pre></td></tr></table></figure></p>
+<p>我们在此处导出组件<code>App</code>并在<code>index.js</code>中引入，把组件写到不同的文件中并不是强制的，但不这样做我们的应用会渐渐变得臃肿且不好管理。</p>
+<h5 id="类组件"><a href="#类组件" class="headerlink" title="类组件"></a>类组件</h5><p>现在我们创建两一个组件，新建<code>Table.js</code>文件并写入下面的代码<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Table</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;table&gt;</span><br><span class="line">                &lt;thead&gt;</span><br><span class="line">                    &lt;tr&gt;</span><br><span class="line">                        &lt;th&gt;Name&lt;<span class="regexp">/th&gt;</span></span><br><span class="line"><span class="regexp">                        &lt;th&gt;Job&lt;/</span>th&gt;</span><br><span class="line">                    &lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">                &lt;/</span>thead&gt;</span><br><span class="line">                &lt;tbody&gt;</span><br><span class="line">                    &lt;tr&gt;</span><br><span class="line">                        &lt;td&gt;Charlie&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">                        &lt;td&gt;Janitor&lt;/</span>td&gt;</span><br><span class="line">                    &lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">                    &lt;tr&gt;</span></span><br><span class="line"><span class="regexp">                        &lt;td&gt;Mac&lt;/</span>td&gt;</span><br><span class="line">                        &lt;td&gt;Bouncer&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">                    &lt;/</span>tr&gt;</span><br><span class="line">                    &lt;tr&gt;</span><br><span class="line">                        &lt;td&gt;Dee&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">                        &lt;td&gt;Aspring actress&lt;/</span>td&gt;</span><br><span class="line">                    &lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">                    &lt;tr&gt;</span></span><br><span class="line"><span class="regexp">                        &lt;td&gt;Dennis&lt;/</span>td&gt;</span><br><span class="line">                        &lt;td&gt;Bartender&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">                    &lt;/</span>tr&gt;</span><br><span class="line">                &lt;<span class="regexp">/tbody&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>table&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Table;</span><br></pre></td></tr></table></figure></p>
+<p>这样我们就创建了一个自定义的类组件，与常规的HTML元素不同的是我们可以复用我们的类组件，在<code>App.js</code>中，我们可以载入<code>Table</code>组件<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Table <span class="keyword">from</span> <span class="string">'./Table'</span></span><br></pre></td></tr></table></figure></p>
+<p>然后在<code>render</code>函数中使用它即可<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (</span><br><span class="line">    &lt;div className=<span class="string">'container'</span>&gt;</span><br><span class="line">        &lt;Table /&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>如果你在回到浏览器查看，你可以看到<code>Table</code>已经被载入呢。</p>
+<p>现在我们知道了什么是一个自定义的类组件，我们可以多次复用这个组件，然而，现在的数据仍然是硬编码的，这让它在某些场景下不会太有用</p>
+<h5 id="函数组件"><a href="#函数组件" class="headerlink" title="函数组件"></a>函数组件</h5><p>React中另一种类型的组件是函数组件，他是一个函数，编写这种组件不需要使用<code>class</code>关键字，现在让我们的<code>Table</code>组件变成两个函数组件，一个<code>table header</code>和一个<code>table body</code>.</p>
+<p>我们使用ES6的箭头函数去创建这些函数组件，首先是Table header:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TableHeader = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        &lt;thead&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;th&gt;Name&lt;<span class="regexp">/th&gt;</span></span><br><span class="line"><span class="regexp">                &lt;th&gt;Job&lt;/</span>th&gt;</span><br><span class="line">            &lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>thead&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接着编写table body:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TableBody = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        &lt;tbody&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;td&gt;Charlie&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">                &lt;td&gt;Janitor&lt;/</span>td&gt;</span><br><span class="line">            &lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">            &lt;tr&gt;</span></span><br><span class="line"><span class="regexp">                &lt;td&gt;Mac&lt;/</span>td&gt;</span><br><span class="line">                &lt;td&gt;Bouncer&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>tr&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;td&gt;Dee&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">                &lt;td&gt;Aspiring actress&lt;/</span>td&gt;</span><br><span class="line">            &lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">            &lt;tr&gt;</span></span><br><span class="line"><span class="regexp">                &lt;td&gt;Dennis&lt;/</span>td&gt;</span><br><span class="line">                &lt;td&gt;Bartender&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>tr&gt;</span><br><span class="line">        &lt;<span class="regexp">/tbody&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>现在我们的<code>Table</code>类组件看起来像这样<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Table</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;table&gt;</span><br><span class="line">                &lt;TableHeader /&gt;</span><br><span class="line">                &lt;TableBody /&gt;</span><br><span class="line">            &lt;<span class="regexp">/table&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>一切表现的跟之前一样，正如你所看到的，组件可以被嵌套在其他组件中使用，函数组件和类组件也可以混用。</p>
+<blockquote>
+<p>一个类组件必须包含<code>render()</code>函数，并且<code>return</code>可以只返回一个父元素</p>
+</blockquote>
+<p>作为对照，让我们来看一下一个函数组件和类组件的区别</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> SimpleComponent = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Example<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClassComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Example<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以注意到如果<code>return</code>仅包含一行内容，可以不需要加括号。</p>
+<h4 id="Props"><a href="#Props" class="headerlink" title="Props"></a>Props</h4><p>现在，我们有了一个很酷的<code>Table</code>组件，但是数据是硬编码的，React最大的好处之一就是我们可以很方便的处理数据，它使用<code>props</code>和<code>state</code>来实现，首先，我们来学习使用props来处理数据。</p>
+<p>第一步，我们将<code>TableBody</code>内的数据列全部移除<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TableBody = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">tbody</span>&gt;</span><span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来将所有的数据放在一个数组对象中，就像我们从Json-based API拿到的数据一样，我们在render中创建这个数组<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">const</span> characters = [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">'name'</span>: <span class="string">'Charlie'</span>,</span><br><span class="line">                <span class="string">'job'</span>: <span class="string">'Janitor'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">'name'</span>: <span class="string">'Mac'</span>,</span><br><span class="line">                <span class="string">'job'</span>: <span class="string">'Bouncer'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">'name'</span>: <span class="string">'Dee'</span>,</span><br><span class="line">                <span class="string">'job'</span>: <span class="string">'Aspring actress'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">'name'</span>: <span class="string">'Dennis'</span>,</span><br><span class="line">                <span class="string">'job'</span>: <span class="string">'Bartender'</span></span><br><span class="line">            &#125;</span><br><span class="line">        ];</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div className=<span class="string">"container"</span>&gt;</span><br><span class="line">                &lt;Table /&gt;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后，我们将数据通过属性(properties)传递到子组件中,我们可以给这个属性任意取一个名字，只要不是JavaScript的保留关键字，所以接下来我使用<code>characterData</code>,传递的数据就是我们刚才定义的<code>characters</code>数组，你需要用{}将变量包含起来以表明他是一个JavaScript表达式。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (</span><br><span class="line">    &lt;div className=<span class="string">"container"</span>&gt;</span><br><span class="line">        &lt;Table characterData=&#123;characters&#125; /&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">)</span></span><br></pre></td></tr></table></figure>
+<p>数据通过这种方式被传递到<code>Table</code>组件中，我们在这边就可以尝试访问数据呢<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Table</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; characterData &#125; = <span class="keyword">this</span>.props;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;table&gt;</span><br><span class="line">                &lt;TableHeader /&gt;</span><br><span class="line">                &lt;TableBody characterData=&#123;characterData&#125; /&gt;</span><br><span class="line">            &lt;<span class="regexp">/table&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果你打开React开发者工具去检查下<code>Table</code>组件，你可以看到我们刚定义的数组在Props中，这个数据会存储在一个虚拟的DOM中，一种比较高效的方式将数据同步到真实的DOM节点上。</p>
+<p>这些数据暂时还没渲染到真实DOM节点上，因此，在<code>Table</code>中，我们需要通过<code>this.props</code>访问所有的属性,当前我们只传入了一个属性characterData,我们可以通过<code>this.props.characterData</code>取到数据。</p>
+<p>我更青睐于使用ES6的解包创建一个变量来获得<code>this.props.characterData</code>的数据。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; characterData &#125; = <span class="keyword">this</span>.props;</span><br></pre></td></tr></table></figure>
+<p>当数据通过props向下传递给<code>TableBody</code>时，我们的<code>TableBody</code>组件是暂时还没做处理的，现在我们对数据进行处理。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TableBody =  <span class="function"><span class="params">props</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> rows = props.characterData.map(<span class="function">(<span class="params">row, index</span>)=&gt;</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;tr key=&#123;index&#125;&gt;</span><br><span class="line">                &lt;td&gt;&#123;row.name&#125;&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">                &lt;td&gt;&#123;row.job&#125;&lt;/</span>td&gt;</span><br><span class="line">            &lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;)</span></span><br><span class="line"><span class="regexp">    return &lt;tbody&gt;&#123;rows&#125;&lt;/</span>tbody&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在回到浏览器可以看到数据已经被加载进来呢</p>
+<p>你有可能注意到我给表格的每行都添加了一个<code>key</code>的索引，你永远都应该使用<a href="https://reactjs.org/docs/lists-and-keys.html#keys" target="_blank" rel="noopener">keys</a>当你在React中创建了一个列表时，这些可以用来帮助辨识每一个列表元素，你将会看到在我们想要操作变动列表元素时这是很有必要的。</p>
+<p>Props用来传递已存在的数据到React组件中是一种很有效的方式，然而组件并不能改变props,它们是只读的，在下一个小节，我们会学习使用<code>state</code>在React应用中进一步的控制和处理数据。</p>
+<h4 id="State"><a href="#State" class="headerlink" title="State"></a>State</h4><p>现在，我们将<code>character</code>的数据都存放在一个数组中，并通过props来传递它，这是一个好的开始，但是想象一下如果我们想要从数组中删掉一个子项，使用Props,我们只拥有一个单向数据流，但是通过state我们可以在组件中更新这些数据。</p>
+<p>你可以假想state为一些需要被保存和修改但是没有必要存储到数据库中的数据，比如：从你的购物车中添加或删除一些商品在你正式付款前。</p>
+<p>我们首先来创建一个<code>state</code>对象<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    state = &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个对象中包含任何你想要保存的属性，对于我们的应用来说，就是<code>characters</code>数组。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    state = &#123;</span><br><span class="line">        characters: [</span><br><span class="line">            &#123; <span class="string">'name'</span>: <span class="string">'Charlie'</span>&#125;</span><br><span class="line">            <span class="comment">// ... add other item here</span></span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来我们想要移除一个<code>character</code>，需要在<code>App</code>类中创建一个<code>removeCharacter</code>方法。</p>
+<p>如果我们要更新state,必须要使用内置的<code>this.setState()</code>方法来操作state,简单的使用<code>this.state.property</code>来赋值是不生效的，最后通过传入索引来过滤数组并返回新的数组</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">removeCharacter = <span class="function"><span class="params">index</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; characters &#125; = <span class="keyword">this</span>.state;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        characters: characters.filter(<span class="function">(<span class="params">character, i</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> i !== index</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>filter</code>方法并不会改变数组而是创建一个新的数组返回，这个方法会过滤掉所有不满足条件的元素。在这里也就是返回数组中所有的元素除了下标与<code>index</code>相等的元素。</p>
+<p>现在我们传递这个函数到<code>Table</code>子组件中，并在表的每一列中渲染一个按钮可以调用这个函数<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (</span><br><span class="line">    &lt;div className=<span class="string">"container"</span>&gt;</span><br><span class="line">        &lt;Table</span><br><span class="line">            characterData=&#123;characters&#125;</span><br><span class="line">            removeCharacter=&#123;<span class="keyword">this</span>.removeCharacter&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">)</span></span><br></pre></td></tr></table></figure></p>
+<p>正如同我们之前从<code>Table</code>传递到<code>TableBody</code>中一样，我们再次通过props传递这个函数<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Table</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; characterData, removeCharacter &#125; = <span class="keyword">this</span>.props;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;table&gt;</span><br><span class="line">                &lt;TableHeader /&gt;</span><br><span class="line">                &lt;TableBody </span><br><span class="line">                    characterData=&#123;characterData&#125; </span><br><span class="line">                    removeCharacter=&#123;removeCharacter&#125; </span><br><span class="line">                /&gt;</span><br><span class="line">            &lt;<span class="regexp">/table&gt;</span></span><br><span class="line"><span class="regexp">        );</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>这里我们在<code>removeCharacter()</code>方法中定义索引的位置，在<code>TableBody</code>组件中，我们通过参数传递了索引值，所以filter函数知道那个子项需要被移除，我们新建一个按钮并设置一个<code>onClick</code>事件来完成函数的调用。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;tr key=&#123;index&#125;&gt;</span><br><span class="line">    &lt;td&gt;&#123;row.name&#125;&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">    &lt;td&gt;&#123;row.job&#125;&lt;/</span>td&gt;</span><br><span class="line">    &lt;td&gt;<span class="xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span>=&gt;</span>props.removeCharacter(index)&#125;&gt;Delete<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span></span><br><span class="line">&lt;<span class="regexp">/tr&gt;</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>为什么<code>onClick</code>中我们传入了一个箭头函数？因为你如果传入props.removeCharacter(index)会被认为是一个表达式而被自动执行</p>
+</blockquote>
+<p>非常有意思，现在我们有了删除按钮，我们可以修改state中的数据通过删除一个character.通过这些，我想你应该懂了如何初始化一个state并对它做修改。</p>
+<h4 id="Submitting-Form-Data"><a href="#Submitting-Form-Data" class="headerlink" title="Submitting Form Data"></a>Submitting Form Data</h4><p>现在我们已经将数据存放在state中了，并且可以从state中删除任意的子项，但是如果我们想要添加一些数据到state中呢？在真实的应用中，你可能会更喜欢以一个空的state开始，比如一个任务列表或者是一个购物车。</p>
+<p>在我们开始前，先从<code>state.characters</code>中删除所有的硬编码数据，接下来我们使用表单来新增数据。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    state = &#123;</span><br><span class="line">        characters: []</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接着我们新建一个<code>Form</code>组件在新的<code>Form.js</code>文件中，我们新建一个类组件，并增加一个我们之前没有使用过的构造函数<code>constructor()</code>,我们需要<code>constructor()</code>去使用<code>this</code>和接受父组件的props</p>
+<p>我们设置了一个包含一些空属性的初始的状态对象，并将它赋值给<code>this.state</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Form</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props)&#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.initialState = &#123;</span><br><span class="line">            name: <span class="string">''</span>,</span><br><span class="line">            job: <span class="string">''</span></span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.state = <span class="keyword">this</span>.initialState;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们的目标是一旦表单中的字段改变了就更新<code>Form</code>组件的state，当我们提交表单时，数据将会被传递到<code>App</code>的state并更新显示<code>Table</code></p>
+<p>第一步，我们建立一个函数用来处理输入的变化，<code>event</code>将会被传入，我们根据输入的内容重新设置<code>Form</code>组件的state.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">handleChange = <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;name, value&#125; = event.target;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        [name] : value</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在我们提交表单前在做一些其他的工作，在render中，我们先从state取到两个属性，并且指定输入框的<code>value</code>为对应的值，接下来我们在监听到<code>onChange</code>事件时运行<code>handleChange()</code>来处理输入。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; name, job &#125; = <span class="keyword">this</span>.state; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        &lt;form&gt;</span><br><span class="line">            &lt;label&gt;Name&lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">            &lt;input </span></span><br><span class="line"><span class="regexp">                type="text" </span></span><br><span class="line"><span class="regexp">                name="name" </span></span><br><span class="line"><span class="regexp">                value=&#123;name&#125; </span></span><br><span class="line"><span class="regexp">                onChange=&#123;this.handleChange&#125; /</span>&gt;</span><br><span class="line">            &lt;label&gt;Job&lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">            &lt;input </span></span><br><span class="line"><span class="regexp">                type="text" </span></span><br><span class="line"><span class="regexp">                name="job" </span></span><br><span class="line"><span class="regexp">                value=&#123;job&#125; </span></span><br><span class="line"><span class="regexp">                onChange=&#123;this.handleChange&#125;/</span>&gt;</span><br><span class="line">        &lt;<span class="regexp">/form&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Form;</span></span><br></pre></td></tr></table></figure>
+<p>将<code>From</code>组件在<code>App</code>中引入并使用后，我们只剩下最后处理数据提交的步骤呢，在<code>App.js</code>中新增<code>handleSubmit</code>方法,我们在更新<code>this.state.characters</code>时使用了<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">ES6的展开语法</a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">handleSubmit = <span class="function"><span class="params">character</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">characters</span>: [...this.state.characters, character]&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>并且确保我们将这个函数作为书香传入到<code>Form</code>中<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Form handleSubmit=&#123;<span class="keyword">this</span>.handleSubmit&#125; /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>Form</code>组件中，我们新建一个<code>submitForm</code>的方法来调用这个函数，将<code>Form</code>的state对象作为<code>character</code>参数传入即可，最后，使用初始的state来清空表单。</p>
+<p>给<code>Form</code>组件添加一个提交按钮，我们使用<code>onClick</code>事件来代替<code>onSubmit</code>因为我们并不是在使用一个标准的提交功能，这个点击事件会调用我们的<code>submitForm</code>函数。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;input </span><br><span class="line">    type=<span class="string">"button"</span> </span><br><span class="line">    value=<span class="string">"Submit"</span> </span><br><span class="line">    onClick=&#123;<span class="keyword">this</span>.submitForm&#125; </span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这样，我们的一个小应用就完成呢，我们可以创建，增加，删除用户，并且表格中显示的数据与state中保持一致。</p>
+<h4 id="Pulling-in-API-Data"><a href="#Pulling-in-API-Data" class="headerlink" title="Pulling in API Data"></a>Pulling in API Data</h4><p>在React中一个最常见的用法是从API中获取数据，如果你对API的概念不是很熟悉并且不知道如何使用它，那么我推荐你阅读下<a href="https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/" target="_blank" rel="noopener">How to Connect an API with JavaScript</a>,这会带领你大致了解API的概念并学习如何在原生JavaScript中使用它。</p>
+<p>作为一个小测试，我们新建一个<code>Api.js</code>文件，在里面创建一个新的<code>App</code>组件，并使用<a href="https://en.wikipedia.org/w/api.php" target="_blank" rel="noopener">Wikipedia Api</a>提供的接口做测试，我在此处使用了一个能搜索任意内容的<a href="https://en.wikipedia.org/w/api.php?action=opensearch&amp;search=Math&amp;format=json&amp;origin=*" target="_blank" rel="noopener">接口</a>,你可以点击这个链接看看返回的内容。</p>
+<p>我们会使用<a href="https://www.taniarascia.com/how-to-use-the-javascript-fetch-api-to-get-json-data/" target="_blank" rel="noopener">JavaScript内置的Fetch</a>方法来获取数据并展示出来。</p>
+<p>我不会在一行行的解释接下来的代码，我们已经学习了如何创建一个组件，渲染他并关联一个state数组，这段代码不同之处在于我们使用了React的生命周期函数<code>componentDidMount()</code>，生命周期是指在React中一系列方法调用的顺序，挂在意味着一个组件已经被插入到DOM中呢。</p>
+<p>当我们拉取数据时，我想要在<code>componentDidMount</code>调用时进行操作，因为我希望在我们拿到数据前组件已经被渲染在DOM中，在下面的代码段中，你会看到如何从Wikipedia API中获取数据并展示在页面上。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Api</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    state = &#123;</span><br><span class="line">        data:[]</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    componentDidMount() &#123;</span><br><span class="line">        <span class="keyword">const</span> url = <span class="string">"https://en.wikipedia.org/w/api.php?action=opensearch&amp;search=Math&amp;format=json&amp;origin=*"</span></span><br><span class="line">        fetch(url)</span><br><span class="line">            .then(<span class="function"><span class="params">result</span> =&gt;</span> result.json())</span><br><span class="line">            .then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">                    data:result</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render()&#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; data &#125; = <span class="keyword">this</span>.state</span><br><span class="line">        <span class="keyword">const</span> result = []</span><br><span class="line">        <span class="keyword">if</span>(data.length&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            data[<span class="number">1</span>].forEach(<span class="function">(<span class="params">e,i</span>)=&gt;</span>&#123;</span><br><span class="line">                <span class="keyword">let</span> l = <span class="xml"><span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;i&#125;</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&#123;data[3][i]&#125;</span>&gt;</span>&#123;e&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;data[2][i]&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">                result.push(l)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">h4</span>&gt;</span>&#123;data[0]&#125;<span class="tag">&lt;/<span class="name">h4</span>&gt;</span><span class="tag">&lt;<span class="name">ul</span>&gt;</span>&#123;result&#125;<span class="tag">&lt;/<span class="name">ul</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Api;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react-js/" rel="tag"># react.js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/26/first-meet-with-pointer/" rel="next" title="初识C语言指针">
+                <i class="fa fa-chevron-left"></i> 初识C语言指针
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/03/add-zh-CN-locales-and-fonts-in-docker-images/" rel="prev" title="给Docker镜像(Debian)添加中文支持和中文字体">
+                给Docker镜像(Debian)添加中文支持和中文字体 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Getting-Started-with-React"><span class="nav-number">1.</span> <span class="nav-text">Getting Started with React</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#What-is-React？"><span class="nav-number">2.</span> <span class="nav-text">What is React？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Set-up-and-Installation"><span class="nav-number">3.</span> <span class="nav-text">Set up and Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#静态HTML文件中引入"><span class="nav-number">3.1.</span> <span class="nav-text">静态HTML文件中引入</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Create-React-App"><span class="nav-number">3.2.</span> <span class="nav-text">Create React App</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#React开发者工具"><span class="nav-number">3.3.</span> <span class="nav-text">React开发者工具</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JSX-JavaScript-XML"><span class="nav-number">4.</span> <span class="nav-text">JSX:JavaScript + XML</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Components"><span class="nav-number">5.</span> <span class="nav-text">Components</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#类组件"><span class="nav-number">5.1.</span> <span class="nav-text">类组件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#函数组件"><span class="nav-number">5.2.</span> <span class="nav-text">函数组件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Props"><span class="nav-number">6.</span> <span class="nav-text">Props</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#State"><span class="nav-number">7.</span> <span class="nav-text">State</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Submitting-Form-Data"><span class="nav-number">8.</span> <span class="nav-text">Submitting Form Data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pulling-in-API-Data"><span class="nav-number">9.</span> <span class="nav-text">Pulling in API Data</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

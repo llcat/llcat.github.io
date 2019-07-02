@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="浏览器视口的二三事(part one)在这个小系列中我将会解释viewports和一些重要的元素(比如&amp;lt;html&amp;gt;, window和screen)的宽度是如何工作的 这篇文章是介绍pc端浏览器的视口，它的目的是为后续讨论相似的mobile端浏览器的视口概念打基础。大多数的web开发者可能已经对pc端的视口概念很清楚呢，在mobile端我们会发现有相同的概念，但是更加复杂。所以接下来我们">
+<meta name="keywords" content="viewport">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器视口(viewport)的二三事(part one)">
+<meta property="og:url" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="浏览器视口的二三事(part one)在这个小系列中我将会解释viewports和一些重要的元素(比如&amp;lt;html&amp;gt;, window和screen)的宽度是如何工作的 这篇文章是介绍pc端浏览器的视口，它的目的是为后续讨论相似的mobile端浏览器的视口概念打基础。大多数的web开发者可能已经对pc端的视口概念很清楚呢，在mobile端我们会发现有相同的概念，但是更加复杂。所以接下来我们">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/screen_info.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/screen_wh.png">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/ten_element.png">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/zoom_100.gif">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/zoom_out.gif">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/zoom_in.gif">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/monitor_wh.png">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_inner.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_inner_zoomed.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_page.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_page_zoomed.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_htmlbehaviour.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_100percent.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_documentwidth.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_client.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_client_smallpage.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_offset.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_offset_smallpage.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_pageXY.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_clientXY.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_screenXY.jpg">
+<meta property="og:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/desktop_mediaqueries.jpg">
+<meta property="og:updated_time" content="2019-04-10T14:46:19.558Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浏览器视口(viewport)的二三事(part one)">
+<meta name="twitter:description" content="浏览器视口的二三事(part one)在这个小系列中我将会解释viewports和一些重要的元素(比如&amp;lt;html&amp;gt;, window和screen)的宽度是如何工作的 这篇文章是介绍pc端浏览器的视口，它的目的是为后续讨论相似的mobile端浏览器的视口概念打基础。大多数的web开发者可能已经对pc端的视口概念很清楚呢，在mobile端我们会发现有相同的概念，但是更加复杂。所以接下来我们">
+<meta name="twitter:image" content="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/screen_info.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>浏览器视口(viewport)的二三事(part one) | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2019/04/04/a-tale-of-two-viewports/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浏览器视口(viewport)的二三事(part one)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-04 10:33:47" itemprop="dateCreated datePublished" datetime="2019-04-04T10:33:47+08:00">2019-04-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-10 22:46:19" itemprop="dateModified" datetime="2019-04-10T22:46:19+08:00">2019-04-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/translation/" itemprop="url" rel="index"><span itemprop="name">translation</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="浏览器视口的二三事-part-one"><a href="#浏览器视口的二三事-part-one" class="headerlink" title="浏览器视口的二三事(part one)"></a>浏览器视口的二三事(part one)</h4><p><strong>在这个小系列中我将会解释viewports和一些重要的元素(比如<code>&lt;html&gt;</code>, window和screen)的宽度是如何工作的</strong></p>
+<p>这篇文章是介绍pc端浏览器的视口，它的目的是为后续讨论相似的mobile端浏览器的视口概念打基础。大多数的web开发者可能已经对pc端的视口概念很清楚呢，在mobile端我们会发现有相同的概念，但是更加复杂。所以接下来我们会预先讨论一些大家都知道的术语，掌握这些术语对后续理解mobile端的视口概念会很有帮助。</p>
+<a id="more"></a>
+<h4 id="概念：设备像素和CSS像素-device-pixels-and-CSS-pixels"><a href="#概念：设备像素和CSS像素-device-pixels-and-CSS-pixels" class="headerlink" title="概念：设备像素和CSS像素(device pixels and CSS pixels)"></a>概念：设备像素和CSS像素(device pixels and CSS pixels)</h4><p>你需要知道的第一个概念是CSS像素以及它与设备像素的区别。</p>
+<p>设备像素是我们从直观上能感受到的像素类型，设备像素为你使用的设备提供了一个正式的分辨率。(以我自己使用的显示屏为例，分辨率为1440*900)你可以简单粗暴的理解为在这块屏幕上横向上每行排列了1440个物理像素点，纵向上每列排列了900个物理像素点。<br><img src="/2019/04/04/a-tale-of-two-viewports/screen_info.jpg" title="screen_info"></p>
+<p>在我们的浏览器中，我们通常可以通过<code>screen.width/height</code>来获取到这个值。<br>验证一下：<br><img src="/2019/04/04/a-tale-of-two-viewports/screen_wh.png" title="screen_width_and_height"></p>
+<p>假设你给某个元素128px的宽度，你的显示器的设备像素宽是1024px，最大化显示你的浏览器窗口时，理论上是这样的8个元素刚好沾满你屏幕的宽度。<br>验证一下：(我的屏幕分辨率宽为1440px,我给每个元素定宽为144px,使用border-box,需要10个元素)<br><img src="/2019/04/04/a-tale-of-two-viewports/ten_element.png" title="ten_element"><br>确实，在缩放为100%时，一行排10个<br>代码如下:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        html, body &#123;</span></span><br><span class="line"><span class="undefined">            margin: 0;</span></span><br><span class="line"><span class="undefined">            padding: 0;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .box &#123;</span></span><br><span class="line"><span class="undefined">            box-sizing: border-box;</span></span><br><span class="line"><span class="undefined">            float: left;</span></span><br><span class="line"><span class="undefined">            width: 144px;</span></span><br><span class="line"><span class="undefined">            height: 144px;</span></span><br><span class="line"><span class="undefined">            border: 1px solid red;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>2<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>3<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>4<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>5<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>6<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>7<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>8<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>9<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>10<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果用户进行缩放，这个时候，计算方式就要变化呢，假设用户恰好放大到200%，你的CSS像素宽度为128px的元素仅需要5个就可以铺满设备像素宽1024px的显示器。(你可以取上面的例子，注释掉5个元素验证下)</p>
+<p>在现代浏览器的中，缩放的实现只不过是做了一个拉伸像素的工作，简言之，就是你所看到的放大并不是将你定义的CSS像素宽128px的元素变为CSS像素宽256px的元素，作为替换，它实际上是将应该用来呈现在屏幕上的设备像素扩大了两倍，也就是原来一个CSS像素在显示屏上是由一个物理(设备)像素来展示，现在一个CSS像素需要两个物理像素来展示。<br>实际的元素的CSS像素仍然是128px,即使它现在在屏幕上占据了256px的空间。</p>
+<p>换言之，放大到200%让一个CSS像素增长到一个设备像素大小的4倍(宽高各增加2倍，总共4倍)</p>
+<p>下面的一组图可以用来阐释这个观点，假设4个像素在缩放为100%的情况下，什么也看不到，CSS像素是1:1完全覆盖在设备像素上的。<br><img src="/2019/04/04/a-tale-of-two-viewports/zoom_100.gif" title="zoom_100"><br>接下来我们缩小，CSS像素开始收缩，意味着一个设备像素现在可以覆盖几个CSS像素呢。<br><img src="/2019/04/04/a-tale-of-two-viewports/zoom_out.gif" title="zoom_out"></p>
+<p>如果你进行放大，相反的，CSS像素开始增大，现在一个CSS像素可以覆盖好几个设备像素<br><img src="/2019/04/04/a-tale-of-two-viewports/zoom_in.gif" title="zoom_in"></p>
+<p>所以说我们的关注点只需要放在CSS像素上即可，CSS像素指定了你的样式表如何渲染。</p>
+<p>设备像素对我们开发者基本是无用的，但对于用户来说，用户会缩放你的页面直到一个他觉得舒适的程度，但是，缩放的程度对你来说无关紧要，浏览器会自动自动确保你的布局被拉伸或压缩。</p>
+<h5 id="100-zoom"><a href="#100-zoom" class="headerlink" title="100% zoom"></a>100% zoom</h5><p>在上面我们有提到过几次假设缩放为100%，那么我们现在给zoom 100%给一个更严格的定义。</p>
+<blockquote>
+<p><em>zoom 100%指的一个CSS像素完全等于一个设备像素</em></p>
+</blockquote>
+<p>100%缩放的概念在接下来的一些概念解释中非常有用，但在日常的工作中你无须过于担心缩放带来的影响，在PC端我们一般是在100%的缩放下测试我们的网站，即使用户进行了放大或缩小的操作，神奇的CSS像素也会确保你的布局保持原有的比例。</p>
+<h4 id="屏幕尺寸-Screen-size"><a href="#屏幕尺寸-Screen-size" class="headerlink" title="屏幕尺寸(Screen size)"></a>屏幕尺寸(Screen size)</h4><p>让我们来看一些实际的测量尺寸，我们首先来看看<code>screen.width</code>和<code>screen.height</code>，它们用来表示一个用户屏幕的所有的宽和高。这个尺寸是基于设备像素测量的，因为它永远不会变，它们是显示器的特性而不是浏览器的。<br><img src="/2019/04/04/a-tale-of-two-viewports/monitor_wh.png" title="monitor_wh"></p>
+<p>非常有趣，但是我们如何处理这些信息？一般来说，什么都不用做，用户的显示器的尺寸对我们一点都不重要，除非你想测量他并用在一些统计数据库中。</p>
+<h4 id="窗口尺寸-Window-size"><a href="#窗口尺寸-Window-size" class="headerlink" title="窗口尺寸(Window size)"></a>窗口尺寸(Window size)</h4><p>相反，我们实际上想知道的是一个浏览器窗口的内部尺寸，这个尺寸会确切的告诉你当前有多少可用空间用于你的CSS布局，你可以通过<code>window.innerWidth</code>和<code>window.innerHeight</code>来获得窗口的尺寸。<br><img src="/2019/04/04/a-tale-of-two-viewports/desktop_inner.jpg" title="desktop_inner"></p>
+<p>显然，浏览器窗口的内部尺寸是基于CSS像素测量的,你需要知道在浏览器窗口中有多少空间放置你的布局，这个尺寸会随着用户的放大而缩小，如果用户进行了放大操作，在浏览器窗口中你能使用的空间会变小，反映在数值上就是<code>window.innerWidth</code>和<code>window.innerHeight</code>这两个值会减小。</p>
+<p>(在桌面上比较特殊的是Opera浏览器，它的<code>window.innerWidth/Height</code>不会随着用户放大而减小，因为他是基于设备像素测量的，这在桌面端可能令人有点恼火，但是这在手机端却是致命的缺陷，在后面我们会说明)</p>
+<img src="/2019/04/04/a-tale-of-two-viewports/desktop_inner_zoomed.jpg" title="desktop_inner_zoomed">
+<p><font color="red">注意：</font>这两个属性测量的宽高是包含滚动条的，滚动条被视为窗口内部高度的一部分(由于一些历史原因)</p>
+<p>我们来验证一下，大家可以copy下面的代码试一下。</p>
+<ol>
+<li>直接缩小窗口，两个值会发生变化</li>
+<li>放大或缩小页面到，两个值会改变<br>如我的浏览器中，100%缩放时宽高是1440<em>789，放大页面到200%，宽高是720</em>394，刚好减小2倍，缩小页面到50%，宽高是2880*1578，刚好增大两倍。</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>test window's inner Size<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        html,body &#123;</span></span><br><span class="line"><span class="undefined">            margin: 0;</span></span><br><span class="line"><span class="undefined">            padding: 0;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .reference &#123;</span></span><br><span class="line"><span class="undefined">            box-sizing: border-box;</span></span><br><span class="line"><span class="undefined">            width: 100px;</span></span><br><span class="line"><span class="undefined">            height: 100px;</span></span><br><span class="line"><span class="undefined">            background: gray;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"reference"</span>&gt;</span></span><br><span class="line">        100px</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="built_in">document</span>.addEventListener(<span class="string">"click"</span>, (e)=&gt;&#123;</span></span><br><span class="line"><span class="javascript">    alert(<span class="string">`window.innerWidth:<span class="subst">$&#123;<span class="built_in">window</span>.innerWidth&#125;</span>\nwindow.innerHeight:<span class="subst">$&#123;<span class="built_in">window</span>.innerHeight&#125;</span>`</span>)</span></span><br><span class="line"><span class="undefined">&#125;)</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="滚动偏移量-Scrolling-offset"><a href="#滚动偏移量-Scrolling-offset" class="headerlink" title="滚动偏移量(Scrolling offset)"></a>滚动偏移量(Scrolling offset)</h4><p><code>window.pageXOffset</code>和<code>window.pageYOffset</code>,包含了一个文档水平和竖直方向上的滚动偏移量，因此你可以知道用户滚动了多少。<br><img src="/2019/04/04/a-tale-of-two-viewports/desktop_page.jpg" title="desktop_page"></p>
+<p>这个属性也是基于CSS像素测量的，你可以知道文档向左或向右移动了多少，无论缩放的状态是怎么样的。</p>
+<p>理论上，如果用户向上滚动了文档，并进行了放大，那么<code>window.pageX/YOffset</code>将会改变。然而，当用户进行缩放时，浏览器会尝试保持页面的缩放的一致性，而保留之前顶部可视的相同的元素在依然在可视页面的顶部(简单解释就是缩放后保证可视区域之前顶部能看到的元素，现在还能看到)，这就会导致pageOffset这个属性不能很好的工作，意味着在实际环境中<code>window.pageX/YOffset</code>的值可能不会变化，已经滚出窗口外面的CSS像素基本上保持一致。</p>
+<img src="/2019/04/04/a-tale-of-two-viewports/desktop_page_zoomed.jpg" title="destop_page_zoomed">
+<p>验证一下,大家可以copy我下面的例子测试一下</p>
+<ul>
+<li>滚动后的偏移量<br>滚动后的偏移值正常，缩放完成后在滚动不会影响偏移值的大小。</li>
+<li>滚动后在放大后偏移不变化<br>滚动到某个程度在缩放偏移值确实不变</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt; --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        html, body &#123;</span></span><br><span class="line"><span class="undefined">            margin: 0;</span></span><br><span class="line"><span class="undefined">            padding: 0;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">        #row , #col&#123;</span></span><br><span class="line"><span class="undefined">            display: flex;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        #col &#123;</span></span><br><span class="line"><span class="undefined">            flex-direction: column;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        .box &#123;</span></span><br><span class="line"><span class="undefined">            box-sizing: border-box;</span></span><br><span class="line"><span class="undefined">            width: 100px;</span></span><br><span class="line"><span class="undefined">            height: 100px;</span></span><br><span class="line"><span class="undefined">            min-width: 100px;</span></span><br><span class="line"><span class="undefined">            min-height: 100px;</span></span><br><span class="line"><span class="undefined">            border-bottom: 1px solid gray;   </span></span><br><span class="line"><span class="undefined">            border-right: 1px solid gray;   </span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"row"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"col"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">let</span> rowContainer = <span class="built_in">document</span>.querySelector(<span class="string">"#row"</span>)</span></span><br><span class="line"><span class="javascript"><span class="keyword">let</span> columnContainer = <span class="built_in">document</span>.querySelector(<span class="string">"#col"</span>)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">addBox</span>(<span class="params">amount</span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">let</span> rowBoxes = <span class="string">""</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">let</span> colBoxes = <span class="string">""</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>; i&lt;amount; i++) &#123;</span></span><br><span class="line"><span class="xml">        rowBoxes += `<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>$&#123;i*100&#125;px<span class="tag">&lt;/<span class="name">div</span>&gt;</span>`</span></span><br><span class="line"><span class="xml">        colBoxes += `<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span>$&#123;(i+1)*100&#125;px<span class="tag">&lt;/<span class="name">div</span>&gt;</span>`</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">    rowContainer.innerHTML = rowBoxes;</span></span><br><span class="line"><span class="undefined">    columnContainer.innerHTML = colBoxes;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined">addBox(15)</span></span><br><span class="line"><span class="javascript"><span class="built_in">document</span>.addEventListener(<span class="string">"click"</span>, (e)=&gt;&#123;</span></span><br><span class="line"><span class="javascript">    alert(<span class="string">`window.pageXOffset:<span class="subst">$&#123;<span class="built_in">window</span>.pageXOffset&#125;</span>\nwindow.pageYOffset:<span class="subst">$&#123;<span class="built_in">window</span>.pageYOffset&#125;</span>`</span>)</span></span><br><span class="line"><span class="undefined">&#125;)</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="概念：视口"><a href="#概念：视口" class="headerlink" title="概念：视口"></a>概念：视口</h4><p>在我们继续引入更多的js属性之前，我们不得不引入另一个概念：视口。<br>视口的功能就是用来约束<code>&lt;html&gt;</code>元素的，<code>html</code>元素是你站点最上层的包含块。</p>
+<p>这个可能听起来让人迷惑，让我们来举一个实际的例子，假设你现在有一个流体布局，其中一个侧边栏的宽度是10%，现在，当你调整浏览器窗口大小时，侧边栏也会随之等比增大或减小，但实际上是如何工作的呢？</p>
+<p>从技术上讲，当侧边栏要从它的父元素获取10%的宽度时会发生什么？当然是从<code>&lt;body&gt;</code>标签获取，但是实际上我们并没有给<code>&lt;body&gt;</code>指定宽度。所以现在问题变成了<code>&lt;body&gt;</code>的宽度是多少呢？</p>
+<p>正常来讲，所有的块级元素都是获取它父元素宽度的100%(会有一些意外情况，但我们暂时忽略这些)，所以<code>&lt;body&gt;</code>的宽度应该和它的父元素一致，也就是<code>&lt;html&gt;</code>元素。</p>
+<p>所以<code>&lt;html&gt;</code>元素的宽度是多少？它和浏览器的窗口一样宽，这就是为什么你定义的宽度为10%的侧边栏是占据你浏览器窗口宽度的10%，所有的web开发者都非常清楚这一点并使用了这个事实。</p>
+<p>你可能不知道它在理论上是如何运作的，理论上，<code>&lt;html&gt;</code>元素的宽度是由视口的宽度来约束的，<code>&lt;html&gt;</code>元素占据视口宽度的100%。</p>
+<p>反过来讲，视口完全可以视为浏览器窗口，它已经被定义成了这样，视口它不是HTML结构的一部分，所以它不受CSS的影响，在桌面浏览器上，它仅仅代表浏览器可视窗口的宽高而已。但是视口的概念在移动端的浏览器上要复杂的多。</p>
+<h5 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h5><p>视口的约束会造成一些奇怪的结果，你可以滚动到这个站点(<a href="https://www.quirksmode.org/mobile/viewports.html)顶部，尝试放大几倍，以便该站点的内容溢出浏览器的窗口。" target="_blank" rel="noopener">https://www.quirksmode.org/mobile/viewports.html)顶部，尝试放大几倍，以便该站点的内容溢出浏览器的窗口。</a></p>
+<p>现在滚动到右边，可以看到顶部的蓝色导航条已经不能很好的包裹它的内容了。<br><img src="/2019/04/04/a-tale-of-two-viewports/desktop_htmlbehaviour.jpg" title="desktop_htmlbehaviour"></p>
+<p>这个行为说明了是视口定义的方式，我给了这个蓝条100%的宽度。100%代表了什么？它表示<code>&lt;html&gt;</code>这个元素，也就是视口的宽度，也是浏览器窗口的高度。</p>
+<p>当我们使用100%s缩放时一切都是正常的，现在我们尝试放大，导致视口的宽高实际上是小于我们的所有内容宽度的。这本身没什么问题，现在我们的元素溢出了<code>&lt;html&gt;</code>元素，并且由于这个元素设置了<code>overflow: visible</code>,这意味着溢出的元素无论如何都会显示。</p>
+<p>但是蓝色的导航条却不会溢出，由于我给定了它<code>width:100%</code>，最终，浏览器会遵循给定的视口宽度来定义蓝色导航条的宽度，而不会去在意这个宽度对于现在来讲是不是窄呢。<br><img src="/2019/04/04/a-tale-of-two-viewports/desktop_100percent.jpg" title="desktop_100percent"></p>
+<h5 id="文档宽度-document-width"><a href="#文档宽度-document-width" class="headerlink" title="文档宽度(document width?)"></a>文档宽度(document width?)</h5><p>如果我真的需要知道页面内容的总宽度是多少，包括那些溢出的部分，据我所知，还没有值能直接拿到。(除非你计算这个页面每个元素独立的宽度和边距，但是这很容易出错，恕我直言)</p>
+<p>我开始相信我们需要一个javascript的属性能给出文档的宽度，我将它称之为”文档宽度”(document width),显然也是基于CSS像素测量的。</p>
+<img src="/2019/04/04/a-tale-of-two-viewports/desktop_documentwidth.jpg" title="desktop_documentwidth">
+<p>如果我们觉得这个值不错，为什么不将这个值暴露给CSS呢？我希望我的蓝色导航条的宽度取决于文档的宽度，而不是<code>&lt;html&gt;</code>元素的宽度。(这肯定比较棘手，如果不能实现这个功能，我也不会感到惊讶)，浏览器厂商们，你们是怎么看的呢?</p>
+<h4 id="测量视口-Measuring-the-view"><a href="#测量视口-Measuring-the-view" class="headerlink" title="测量视口(Measuring the view)"></a>测量视口(Measuring the view)</h4><p>你可能想要知道一个视口的尺寸，他们可以通过<code>document.documentElement.clientWidth/Height</code>拿到。</p>
+<img src="/2019/04/04/a-tale-of-two-viewports/desktop_client.jpg" title="desktop_client">
+<p>如果你熟悉文档对象模型，你应该知道<code>document.documentElement</code>实际上就是<code>&lt;html&gt;</code>元素，一个HTMl文档的根节点。但是，视口比<code>&lt;html&gt;</code>元素还要高一级，应该说，视口包含着<code>&lt;html&gt;</code>元素，所以你给<code>&lt;html&gt;</code>元素设置了宽度，是会有一定问题的。(我不推荐这么做，但这也许是一个办法)</p>
+<p>比如下面的这种情况，<code>document.clientWidth/Height</code>将会给出的是视口的尺寸，而不是<code>&lt;html&gt;</code>元素的宽度。(这是一个特殊的规则仅仅对于这个元素的这个属性对，其他的状况下是元素使用的实际宽度)</p>
+<img src="/2019/04/04/a-tale-of-two-viewports/desktop_client_smallpage.jpg" title="desktop_client_smallpage">
+<p>所以<code>document.documentElement.clientWidth/Height</code>也给出了视口的尺寸，无论<code>&lt;html&gt;</code>元素的尺寸如何。</p>
+<p>验证一下：<br>给html一个固定宽高，验证<code>documentElement.clientWidth/Height</code>是给出的视口宽高。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        html, body, h2 &#123;</span></span><br><span class="line"><span class="undefined">            padding: 0;</span></span><br><span class="line"><span class="undefined">            margin: 0;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        html &#123;</span></span><br><span class="line"><span class="undefined">            width: 200px;</span></span><br><span class="line"><span class="undefined">            height: 800px;</span></span><br><span class="line"><span class="undefined">            border: 1px solid gray</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>test<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"msg"</span>&gt;</span>Lorem<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.addEventListener(<span class="string">"click"</span>,(e)=&gt;&#123;</span></span><br><span class="line"><span class="javascript">        alert(<span class="string">`documentElement.clientWidth:<span class="subst">$&#123;<span class="built_in">document</span>.documentElement.clientWidth&#125;</span>\ndocumentElement.clientHeight:<span class="subst">$&#123;<span class="built_in">document</span>.documentElement.clientHeight&#125;</span>`</span>)</span></span><br><span class="line"><span class="undefined">    &#125;)</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="两个属性对的关系-Two-property-pairs"><a href="#两个属性对的关系-Two-property-pairs" class="headerlink" title="两个属性对的关系(Two property pairs)"></a>两个属性对的关系(Two property pairs)</h5><p>前面不是介绍过视口的尺寸可以由<code>window.innerWidth/Height</code>得到吗？嗯，是也不是。</p>
+<p>这两个属性对是存在一些正式的区别的，<code>document.documentElement.clientWidth/Height</code>是不包含滚动条的大小的，但是<code>window.innerWidth/Height</code>是包含滚动条的，显然这点区别看不起来有点吹毛求疵呢。</p>
+<p>真实的原因是这两个属性是浏览器战争的产物，在过去，网景(Netscape)只支持<code>window.innerWidth/Height</code>而IE只支持<code>document.documentElement.clientWidth/Height</code>,随后的浏览器对这两个属性同时支持。</p>
+<p>在桌面浏览器上这两个的异同只是很小的一点干扰，但是这对移动端的浏览器却很有用，后面我们会讲到。</p>
+<h4 id="测量元素-Measuring-the-lt-html-gt-element"><a href="#测量元素-Measuring-the-lt-html-gt-element" class="headerlink" title="测量元素(Measuring the &lt;html&gt; element)"></a>测量<html>元素(Measuring the <code>&lt;html&gt;</code> element)</html></h4><p>在任何情况下我们都可以通过<code>clientWidth/Height</code>获取视口的尺寸，但是我们如何取得html元素的尺寸呢？他们存放在<code>document.documentElement.offsetWidth/Height</code>中。</p>
+<img src="/2019/04/04/a-tale-of-two-viewports/desktop_offset.jpg" title="desktop_offset">
+<p>这个属性可以让你把<code>&lt;html&gt;</code>元素当作块级元素访问，如果你设置了宽度，<code>offsetWidth</code>将会显示它。</p>
+<img src="/2019/04/04/a-tale-of-two-viewports/desktop_offset_smallpage.jpg" title="desktop_offset_smallpage">
+<h4 id="事件坐标-Event-coordinates"><a href="#事件坐标-Event-coordinates" class="headerlink" title="事件坐标(Event coordinates)"></a>事件坐标(Event coordinates)</h4><p>接下来我们介绍事件坐标，当一个鼠标事件发生时，会有5个以上的属性值来告诉你事件确切发生的位置。我们只讨论其中比较重要的3个。</p>
+<ol>
+<li><code>pageX/Y</code><br> 给出相对于<code>&lt;html&gt;</code>元素的坐标位置（CSS像素)</li>
+<li><code>clientX/Y</code><br> 给出了相对于视口的坐标位置(CSS像素)</li>
+<li><code>screenX/Y</code><br> 给出了相对于屏幕的坐标位置(设备像素)</li>
+</ol>
+<ul>
+<li>pageX/Y<img src="/2019/04/04/a-tale-of-two-viewports/desktop_pageXY.jpg" title="desktop_pageXY"></li>
+<li>clientX/Y<img src="/2019/04/04/a-tale-of-two-viewports/desktop_clientXY.jpg" title="desktop_clientXY"></li>
+<li>screenX/Y<img src="/2019/04/04/a-tale-of-two-viewports/desktop_screenXY.jpg" title="desktop_screenXY">
+</li>
+</ul>
+<p>90%的情况下你会使用<code>pageX/Y</code>，因为通常我们只想知道与文档的相对位置，10%的情况下你可能会使用到<code>clientX/Y</code>，但是基本上你不会感兴趣相对屏幕位置的事件发生的坐标。</p>
+<h4 id="媒体查询-Media-queries"><a href="#媒体查询-Media-queries" class="headerlink" title="媒体查询(Media queries)"></a>媒体查询(Media queries)</h4><p>最后，我们来聊一聊媒体查询，想法很简单，就是当页面的尺寸大于，等于，或小于某个确切尺寸时，我们可以定义使用一些定制的CSS样式。举个例子<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> all and (max-width: <span class="number">400px</span>) &#123;</span><br><span class="line">    <span class="selector-tag">div</span><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">        <span class="attribute">width</span>: <span class="number">100px</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在，这个侧边栏宽度是300px,只有当宽度小于400px时，侧边栏的宽度变成100px。<br>提一个问题：这个宽度是基于什么测量的？<br>这里有两个媒体查询相关的属性:<code>width/height</code>和<code>device-width/height</code></p>
+<ol>
+<li><code>width/height</code>使用的值与<code>document.documentElement.clientWidth/Height</code>相同，基于CSS像素工作。</li>
+<li><code>device-width/height</code>使用的值与<code>screen.width/height</code>相同，基于设备像素工作。</li>
+</ol>
+<img src="/2019/04/04/a-tale-of-two-viewports/desktop_mediaqueries.jpg" title="desktop_mediaqueries">
+<p>你应该使用哪一个？几乎不用想，选用<code>width/height</code>，web开发者对设备宽度是不关心的啊，我们只需要关注浏览器窗口的大小。<br>所以，忘掉<code>device-width</code>并使用<code>width</code>即可,接下来我们可以看到，在移动端这种情况更混乱。</p>
+<h4 id="结论-Conclusion"><a href="#结论-Conclusion" class="headerlink" title="结论(Conclusion)"></a>结论(Conclusion)</h4><p>这篇文章我们总结了桌面浏览器的一些行为，在第二篇中我会介绍在移动端中相关的概念，并揭示一些与桌面端浏览器的不同之处。</p>
+<blockquote>
+<p><strong>tips:</strong><br>本文是一篇介绍浏览器viewport的译文，我觉得掌握这些知识对后续无论是pc端或mobile端的web开发工作会有很大的帮助，由于原文指向的中文翻译地址已经失效，故此在我的blog上在翻译一次。对于一些技术名词我会保留，以避免造成误解。个人能力有限，若翻译上有错误或不准确的地方，望大家斧正。<a href="https://github.com/llcat/blog-source" target="_blank" rel="noopener">blog-source</a><br>原文: <a href="https://www.quirksmode.org/mobile/viewports.html" target="_blank" rel="noopener">A tale of two viewports(part one)</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/viewport/" rel="tag"># viewport</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/16/sort-algorithm/" rel="next" title="排序算法">
+                <i class="fa fa-chevron-left"></i> 排序算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/09/a-tale-of-tow-viewports2/" rel="prev" title="浏览器视口(viewport)的二三事(part two)">
+                浏览器视口(viewport)的二三事(part two) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器视口的二三事-part-one"><span class="nav-number">1.</span> <span class="nav-text">浏览器视口的二三事(part one)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#概念：设备像素和CSS像素-device-pixels-and-CSS-pixels"><span class="nav-number">2.</span> <span class="nav-text">概念：设备像素和CSS像素(device pixels and CSS pixels)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#100-zoom"><span class="nav-number">2.1.</span> <span class="nav-text">100% zoom</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#屏幕尺寸-Screen-size"><span class="nav-number">3.</span> <span class="nav-text">屏幕尺寸(Screen size)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#窗口尺寸-Window-size"><span class="nav-number">4.</span> <span class="nav-text">窗口尺寸(Window size)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#滚动偏移量-Scrolling-offset"><span class="nav-number">5.</span> <span class="nav-text">滚动偏移量(Scrolling offset)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#概念：视口"><span class="nav-number">6.</span> <span class="nav-text">概念：视口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#结论"><span class="nav-number">6.1.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文档宽度-document-width"><span class="nav-number">6.2.</span> <span class="nav-text">文档宽度(document width?)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测量视口-Measuring-the-view"><span class="nav-number">7.</span> <span class="nav-text">测量视口(Measuring the view)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#两个属性对的关系-Two-property-pairs"><span class="nav-number">7.1.</span> <span class="nav-text">两个属性对的关系(Two property pairs)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测量元素-Measuring-the-lt-html-gt-element"><span class="nav-number">8.</span> <span class="nav-text">测量元素(Measuring the &lt;html&gt; element)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事件坐标-Event-coordinates"><span class="nav-number">9.</span> <span class="nav-text">事件坐标(Event coordinates)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#媒体查询-Media-queries"><span class="nav-number">10.</span> <span class="nav-text">媒体查询(Media queries)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结论-Conclusion"><span class="nav-number">11.</span> <span class="nav-text">结论(Conclusion)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar64.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar32.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言最近有碰到这样的一个问题，在Docker容器中生成的pdf文件中的中文内容全部丢失，英文内容显示正常。任务场景是这样的：我司的代码全部托管在Gerrit上，开发者提交或者打版本tag后触发Jenkins完成一系列的CI流程，我需要开发一个当打完版本tag后能自动生成发布文档的功能，大体上的步骤就是获取信息(tag下的提交信息，病毒扫描，测试报告等)拼接成模板后生成发布文档即可，技术栈就选用了n">
+<meta name="keywords" content="locales and fonts">
+<meta property="og:type" content="article">
+<meta property="og:title" content="给Docker镜像(Debian)添加中文支持和中文字体">
+<meta property="og:url" content="https://llcat.github.io/2018/12/03/add-zh-CN-locales-and-fonts-in-docker-images/index.html">
+<meta property="og:site_name" content="llcat-blog">
+<meta property="og:description" content="前言最近有碰到这样的一个问题，在Docker容器中生成的pdf文件中的中文内容全部丢失，英文内容显示正常。任务场景是这样的：我司的代码全部托管在Gerrit上，开发者提交或者打版本tag后触发Jenkins完成一系列的CI流程，我需要开发一个当打完版本tag后能自动生成发布文档的功能，大体上的步骤就是获取信息(tag下的提交信息，病毒扫描，测试报告等)拼接成模板后生成发布文档即可，技术栈就选用了n">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-29T16:03:26.574Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="给Docker镜像(Debian)添加中文支持和中文字体">
+<meta name="twitter:description" content="前言最近有碰到这样的一个问题，在Docker容器中生成的pdf文件中的中文内容全部丢失，英文内容显示正常。任务场景是这样的：我司的代码全部托管在Gerrit上，开发者提交或者打版本tag后触发Jenkins完成一系列的CI流程，我需要开发一个当打完版本tag后能自动生成发布文档的功能，大体上的步骤就是获取信息(tag下的提交信息，病毒扫描，测试报告等)拼接成模板后生成发布文档即可，技术栈就选用了n">
+
+
+
+
+
+
+  <link rel="canonical" href="https://llcat.github.io/2018/12/03/add-zh-CN-locales-and-fonts-in-docker-images/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>给Docker镜像(Debian)添加中文支持和中文字体 | llcat-blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">llcat-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">life, interest, technology</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llcat.github.io/2018/12/03/add-zh-CN-locales-and-fonts-in-docker-images/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="llcat(plyu)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar128.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="llcat-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">给Docker镜像(Debian)添加中文支持和中文字体
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-03 10:18:59" itemprop="dateCreated datePublished" datetime="2018-12-03T10:18:59+08:00">2018-12-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-30 00:03:26" itemprop="dateModified" datetime="2018-12-30T00:03:26+08:00">2018-12-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近有碰到这样的一个问题，在Docker容器中生成的pdf文件中的中文内容全部丢失，英文内容显示正常。任务场景是这样的：我司的代码全部托管在Gerrit上，开发者提交或者打版本tag后触发Jenkins完成一系列的CI流程，我需要开发一个当打完版本tag后能自动生成发布文档的功能，大体上的步骤就是获取信息(tag下的提交信息，病毒扫描，测试报告等)拼接成模板后生成发布文档即可，技术栈就选用了node.js,主要依赖了两个工具包<a href="https://www.npmjs.com/package/markdown-pdf" target="_blank" rel="noopener">markdown-pdf</a>和<a href="https://www.npmjs.com/package/request" target="_blank" rel="noopener">request</a>,<code>markdown-pdf</code>支持用CSS自由控制样式，实现的效果还是很理想的。最后生成文档应用我是打包到docker镜像中为了方便集成到Jenkins的CI流程中，但是碰到了一点问题，就是上面说的中文内容不显示的问题，查阅资料过程中发现也没有较完整的文章介绍，在此与大家分享我解决的流程以供后面遇到问题的人参考。</p>
+<a id="more"></a>
+<h4 id="添加locales"><a href="#添加locales" class="headerlink" title="添加locales"></a>添加locales</h4><p>一开始我的Dockerfile是这样写的，依赖于<code>node:10.13</code>，并未做什么特殊的处理。<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> node:<span class="number">10.13</span></span><br><span class="line"><span class="keyword">LABEL</span> "author"="pino"</span><br><span class="line">LABEL "version"="1.0"</span><br><span class="line">LABEL "description"="use to generate release note when jenkins build"</span><br><span class="line">ENV GERRIT_PROJECT "pass from jenkins"</span><br><span class="line">ENV GERRIT_REFNAME "pass from jenkins"</span><br><span class="line">ENV JENKINS_JOBNAME "pass from jenkins"</span><br><span class="line">ENV JENKINS_BUILD_ID "pass from jenkins"</span><br><span class="line">WORKDIR /home/pino/app</span><br><span class="line">ADD . /home/pino/app/</span><br><span class="line">CMD ["npm", "start"]</span><br></pre></td></tr></table></figure></p>
+<p>一开始做文档生成时没有啥问题，但在后续有人发现文档中的中文内容是缺失的，我开始在本地测试，发现在本地测试时生成的文档内容是正常的，中英文都是可显示的，于是我怀疑应该是与程序的运行环境有关，那么运行时的docker container中相比本机环境少了些什么呢？</p>
+<p>我首先想到的是编码问题，是不是容器中没有合适的字符集导致没办法识别中文呢，朝着这个方向去查阅资料我发现了linux是支持本土化(locales)的，那我们首先检查下container内的字符集是不是有正确的设置呢</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行node.js容器</span></span><br><span class="line">docker run -it --name node_test node:10.13 bash</span><br><span class="line"><span class="comment"># 查看系统的locale</span></span><br><span class="line">locale</span><br><span class="line"><span class="comment"># 查看系统所有的locale</span></span><br><span class="line">locale -a</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">root@3035b11daef5:/# locale</span><br><span class="line">LANG=</span><br><span class="line">LANGUAGE=</span><br><span class="line">LC_CTYPE=&quot;POSIX&quot;</span><br><span class="line">LC_NUMERIC=&quot;POSIX&quot;</span><br><span class="line">LC_TIME=&quot;POSIX&quot;</span><br><span class="line">LC_COLLATE=&quot;POSIX&quot;</span><br><span class="line">LC_MONETARY=&quot;POSIX&quot;</span><br><span class="line">LC_MESSAGES=&quot;POSIX&quot;</span><br><span class="line">LC_PAPER=&quot;POSIX&quot;</span><br><span class="line">LC_NAME=&quot;POSIX&quot;</span><br><span class="line">LC_ADDRESS=&quot;POSIX&quot;</span><br><span class="line">LC_TELEPHONE=&quot;POSIX&quot;</span><br><span class="line">LC_MEASUREMENT=&quot;POSIX&quot;</span><br><span class="line">LC_IDENTIFICATION=&quot;POSIX&quot;</span><br><span class="line">LC_ALL=</span><br><span class="line"></span><br><span class="line">root@3035b11daef5:/# locale -a</span><br><span class="line">C</span><br><span class="line">C.UTF-8</span><br><span class="line">POSIX</span><br></pre></td></tr></table></figure>
+<p>可以看到容器默认使用的locale是POSIX,是不支持中文编码的，查阅到有的资料说C.UTF-8是支持中文编码的，但我为了保险起见，采用看起来更靠谱的zh_CN.UTF-8,在容器中支持的所有locale中是不包含zh_CN.UTF-8，所以需要我们手动安装。所以我在Dockerfile中添加了下面这几行</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> apt-get update</span></span><br><span class="line"><span class="bash">RUN apt-get install -y locales</span></span><br><span class="line"><span class="bash">RUN sed -ie <span class="string">'s/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g'</span> /etc/locale.gen</span></span><br><span class="line"><span class="bash">RUN locale-gen</span></span><br><span class="line"><span class="bash">ENV LANG zh_CN.UTF-8</span></span><br></pre></td></tr></table></figure>
+<p>上面的几条指令总的来说就是安装了所有的本地化支持，并在locale.gen这个配置文件中开启zh_CN.UTF-8的支持，最后重新生成locale并设置了环境变量LANG为zh_CN.UTF-8。</p>
+<p>运行我们新构建的镜像并查看locale</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">root@0fd809a673a7:/home/pino/app# locale</span><br><span class="line">LANG=zh_CN.UTF-8</span><br><span class="line">LANGUAGE=</span><br><span class="line">LC_CTYPE=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_NUMERIC=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_TIME=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_COLLATE=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_MONETARY=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_MESSAGES=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_PAPER=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_NAME=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_ADDRESS=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_TELEPHONE=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_MEASUREMENT=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_IDENTIFICATION=&quot;zh_CN.UTF-8&quot;</span><br><span class="line">LC_ALL=</span><br><span class="line"></span><br><span class="line">root@0fd809a673a7:/home/pino/app# locale -a</span><br><span class="line">C</span><br><span class="line">C.UTF-8</span><br><span class="line">POSIX</span><br><span class="line">zh_CN.utf8</span><br></pre></td></tr></table></figure>
+<p>可以看到这个时候我们已经成功的添加了中文编码支持，然而我再次测试时发现生成的文档的中文内容还是缺失，那我们还需要给容器环境添加一些什么呢？</p>
+<h4 id="添加fonts"><a href="#添加fonts" class="headerlink" title="添加fonts"></a>添加fonts</h4><p>我们知道一个文字渲染到屏幕上显示是需要对应的字体文件支持的，比如大家耳熟能详的微软雅黑，方正宋体等等，在浏览markdown-pdf的文档时，发现他是用phantom.js做的渲染，那是不是由于容器中缺少了字体文件导致中文文本不能被正常渲染出来呢？我们还是重新运行一个node容器看看。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行node.js容器</span></span><br><span class="line">docker run -it --name node_test node:10.13 bash</span><br><span class="line"><span class="comment"># 查看系统所有的字体</span></span><br><span class="line"><span class="built_in">fc</span>-list</span><br><span class="line"><span class="comment"># 查看字体的详细信息</span></span><br><span class="line"><span class="built_in">fc</span>-list -v | grep zh</span><br></pre></td></tr></table></figure></p>
+<p>可以看到容器中的字体文件如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@239783fb404a:/# fc-list</span><br><span class="line">/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf: DejaVu Serif:style=Bold</span><br><span class="line">/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf: DejaVu Sans Mono:style=Book</span><br><span class="line">/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: DejaVu Sans:style=Book</span><br><span class="line">/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf: DejaVu Sans:style=Bold</span><br><span class="line">/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf: DejaVu Sans Mono:style=Bold</span><br><span class="line">/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf: DejaVu Serif:style=Book</span><br></pre></td></tr></table></figure></p>
+<p>我们使用grep做过滤时发现上面的这些字体文件都是不支持中文的。ok，我们离解决问题更近一步呢，既然没有字体文件，那我们自己加吧！</p>
+<p>我从win10中随便拷贝了几个字体文件做测试，这个应该是有版权的，如果大家是商用一定注意，windows的字体文件全部都存放在<code>C:\Windows\Fonts</code>中。准备好字体文件后，我在Dockerfile中加了下面的指令</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /usr/share/fonts/truetype/deng/</span></span><br><span class="line"><span class="bash">ADD ./fonts/deng/*.ttf /usr/share/fonts/truetype/deng/</span></span><br><span class="line"><span class="bash">RUN <span class="built_in">fc</span>-cache -vf</span></span><br><span class="line"><span class="bash">RUN <span class="built_in">fc</span>-list</span></span><br></pre></td></tr></table></figure>
+<p>上面这几条指令主要是在容器存放字体文件的目录下新建了个目录存放等线字体，将工程目录下我准备好的文件拷贝到容器中，执行字体文件更新，最后查看下是否成功添加，当然最后一条指令是可以不加的。</p>
+<p>重新构建镜像后在重新运行进去看看，会看到我们添加的字体是支持中文的，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@09b3809c5d03:/home/pino/app# fc-list -v | grep zh</span><br><span class="line">        familylang: &quot;zh-cn&quot;(s) &quot;en&quot;(s)</span><br><span class="line">        fullnamelang: &quot;zh-cn&quot;(s) &quot;en&quot;(s)</span><br><span class="line">        lang: aa|ay|bg|bi|br|ca|ch|co|cy|da|de|el|en|es|et|eu|fi|fj|fo|fr|fur|fy|gd|gl|gv|ho|ia|id|ie|io|is|it|kum|lb|mg|nb|nds|nl|nn|no|nr|nso|ny|oc|om|os|pt|rm|ru|sel|sma|smj|so|sq|ss|st|sv|sw|tk|tl|tn|ts|uz|vo|vot|wa|xh|yap|zh-cn|zh-sg|zu|an|fil|ht|jv|kj|ku-tr|kwm|li|ms|ng|pap-an|pap-aw|rn|rw|sc|sg|sn|su|za(s)</span><br></pre></td></tr></table></figure></p>
+<p>到此，做到这一步，我重新测试后发现生成的文档中文不显示的问题已经解决呢，附上完整的Dockerfile.</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> node:<span class="number">10.13</span></span><br><span class="line"><span class="keyword">LABEL</span><span class="bash"> <span class="string">"author"</span>=<span class="string">"pino"</span></span></span><br><span class="line"><span class="bash">LABEL <span class="string">"version"</span>=<span class="string">"1.0"</span></span></span><br><span class="line"><span class="bash">LABEL <span class="string">"description"</span>=<span class="string">"use to generate release note when jenkins build"</span></span></span><br><span class="line"><span class="bash">RUN apt-get update</span></span><br><span class="line"><span class="bash">RUN apt-get install -y locales</span></span><br><span class="line"><span class="bash">RUN sed -ie <span class="string">'s/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g'</span> /etc/locale.gen</span></span><br><span class="line"><span class="bash">RUN locale-gen</span></span><br><span class="line"><span class="bash">RUN mkdir /usr/share/fonts/truetype/deng/</span></span><br><span class="line"><span class="bash">ADD ./fonts/deng/*.ttf /usr/share/fonts/truetype/deng/</span></span><br><span class="line"><span class="bash">RUN <span class="built_in">fc</span>-cache -vf</span></span><br><span class="line"><span class="bash">RUN <span class="built_in">fc</span>-list</span></span><br><span class="line"><span class="bash">ENV LANG zh_CN.UTF-8</span></span><br><span class="line"><span class="bash">ENV GERRIT_PROJECT <span class="string">"pass from jenkins"</span></span></span><br><span class="line"><span class="bash">ENV GERRIT_REFNAME <span class="string">"pass from jenkins"</span></span></span><br><span class="line"><span class="bash">ENV JENKINS_JOBNAME <span class="string">"pass from jenkins"</span></span></span><br><span class="line"><span class="bash">ENV JENKINS_BUILD_ID <span class="string">"pass from jenkins"</span></span></span><br><span class="line"><span class="bash">WORKDIR /home/pino/app</span></span><br><span class="line"><span class="bash">ADD . /home/pino/app/</span></span><br><span class="line"><span class="bash">CMD [<span class="string">"npm"</span>, <span class="string">"start"</span>]</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/locales-and-fonts/" rel="tag"># locales and fonts</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/29/get-started-with-react/" rel="next" title="React 入门">
+                <i class="fa fa-chevron-left"></i> React 入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/18/fe-interview/" rel="prev" title="前端知识点集锦">
+                前端知识点集锦 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar128.png"
+                alt="llcat(plyu)" />
+            
+              <p class="site-author-name" itemprop="name">llcat(plyu)</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/llcat" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:15629128667@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jingfengji.github.io" title="jingfengji" target="_blank">jingfengji</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://matthewdev.tech" title="matthew" target="_blank">matthew</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加locales"><span class="nav-number">2.</span> <span class="nav-text">添加locales</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加fonts"><span class="nav-number">3.</span> <span class="nav-text">添加fonts</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">llcat(plyu)</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
