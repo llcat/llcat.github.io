@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
@@ -129,7 +129,7 @@
 
 
 
-  <link rel="canonical" href="https://llcat.github.io/2018/04/27/docker-introduction/"/>
+  <link rel="canonical" href="https://llcat.github.io/2018/04/27/docker-introduction/">
 
 
 
@@ -229,7 +229,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -237,7 +237,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -245,7 +245,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
         
         
@@ -253,7 +253,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
 
       
@@ -308,7 +308,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="llcat(plyu)">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar128.png">
     </span>
 
@@ -369,7 +369,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -490,7 +490,7 @@
 <li><p><strong>关于Services</strong><br>在一个分布式的应用中，应用不同的功能部分被称为服务，以搭建一个视频分享的网站来讲：我们需要一个服务用来存储应用的数据。一个服务用来在后台对用户上传的视频进行转码，另一个服务用来提供展示的用户界面。那么services就可以看作是生产环境中的containers,一个service也仅仅运行一个镜像，不同的地方在于在services这个层次结构中，我们可以定义镜像的运行方式。比如绑定在那个端口运行，运行多少个container的副本等等，在配置文件中我们改变一个数字就可以增加运行的容器数目，从而分配更多的计算资源。在docker平台上，我们很容易就可以实现上述的内容。</p>
 </li>
 <li><p><strong><code>docker-compose.yml</code>文件</strong><br>保存下面的配置到文件<code>docker-compose.yml</code>中。</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  web:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">username/repo:tag</span></span><br><span class="line"><span class="attr">    deploy:</span></span><br><span class="line"><span class="attr">      replicas:</span> <span class="number">5</span></span><br><span class="line"><span class="attr">      resources:</span></span><br><span class="line"><span class="attr">        limits:</span></span><br><span class="line"><span class="attr">          cpus:</span> <span class="string">"0.1"</span></span><br><span class="line"><span class="attr">          memory:</span> <span class="number">50</span><span class="string">M</span></span><br><span class="line"><span class="attr">      restart_policy:</span></span><br><span class="line"><span class="attr">        condition:</span> <span class="string">on-failure</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"4000:80"</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">webnet</span></span><br><span class="line"><span class="attr">  networks:</span></span><br><span class="line"><span class="attr">    webnet:</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">username/repo:tag</span></span><br><span class="line">    <span class="attr">deploy:</span></span><br><span class="line">      <span class="attr">replicas:</span> <span class="number">5</span></span><br><span class="line">      <span class="attr">resources:</span></span><br><span class="line">        <span class="attr">limits:</span></span><br><span class="line">          <span class="attr">cpus:</span> <span class="string">"0.1"</span></span><br><span class="line">          <span class="attr">memory:</span> <span class="string">50M</span></span><br><span class="line">      <span class="attr">restart_policy:</span></span><br><span class="line">        <span class="attr">condition:</span> <span class="string">on-failure</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"4000:80"</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">webnet</span></span><br><span class="line">  <span class="attr">networks:</span></span><br><span class="line">    <span class="attr">webnet:</span></span><br></pre></td></tr></table></figure>
 <p>在<code>docker-compose.yml</code>文件中，告诉docker做下面这些工作。</p>
 <ul>
 <li>使用你指定的镜像。</li>
@@ -628,9 +628,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar128.png"
-                alt="llcat(plyu)" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar128.png" alt="llcat(plyu)">
             
               <p class="site-author-name" itemprop="name">llcat(plyu)</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -643,7 +641,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -735,7 +733,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">18</span>
+                      
+                    
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -823,7 +823,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
